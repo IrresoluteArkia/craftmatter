@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.irar.craftmatter.handlers.ItemHandler;
+import com.irar.craftmatter.item.ItemCraft;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
@@ -28,9 +30,12 @@ public class TileBlueMaker extends TileEntity implements ITickable, IInventory{
 	private int tickNum = 0;
     private NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(3, ItemStack.EMPTY);
     private String customName = "Blueprint Maker";
+	private int amountMatter;
     
     public TileBlueMaker(){
-
+/*    	if(Minecraft.getMinecraft().world.isRemote) {
+    		
+    	}*/
     }
 
     public String getCustomName() {
@@ -43,6 +48,20 @@ public class TileBlueMaker extends TileEntity implements ITickable, IInventory{
     
 	@Override
 	public void update() {
+		tickNum++;
+		if(this.tickNum % 20 == 0) {
+			System.out.println(this.amountMatter);
+		}
+		ItemStack matter = inventory.get(1);
+		if(!matter.isEmpty() && matter.getItem() instanceof ItemCraft) {
+			this.amountMatter += matter.getCount();
+			if(ItemCraft.getAmount(matter) == 1) {
+				inventory.set(1, ItemStack.EMPTY);
+			}else {
+				ItemCraft.setAmount(matter, ItemCraft.getAmount(matter) - 1);
+			}
+			this.markDirty();
+		}
 	}
 
 	@Override
@@ -176,11 +195,14 @@ public class TileBlueMaker extends TileEntity implements ITickable, IInventory{
         {
             this.customName = compound.getString("CustomName");
         }
+        if (compound.hasKey("AMOUNT_MATTER"))
+        {
+            this.amountMatter = compound.getInteger("AMOUNT_MATTER");
+        }
     }
 
     public NBTTagCompound writeToNBT(NBTTagCompound compound)
     {
-        super.writeToNBT(compound);
 
         ItemStackHelper.saveAllItems(compound, this.inventory);
 
@@ -188,13 +210,19 @@ public class TileBlueMaker extends TileEntity implements ITickable, IInventory{
         {
             compound.setString("CustomName", this.customName);
         }
+        compound.setInteger("AMOUNT_MATTER", this.amountMatter);
 
-        return compound;
+        
+        return super.writeToNBT(compound);
     }
     
 	@Override
 	public ITextComponent getDisplayName() {
         return (ITextComponent)(this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName(), new Object[0]));
+	}
+
+	public int getAmountMatter() {
+		return this.amountMatter ;
 	}
 
     

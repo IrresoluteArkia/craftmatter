@@ -3,10 +3,13 @@ package com.irar.craftmatter.proxy;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.irar.craftmatter.CraftMatter;
 import com.irar.craftmatter.crafting.Mapper;
 import com.irar.craftmatter.handlers.BlockHandler;
 import com.irar.craftmatter.handlers.CraftingHandler;
 import com.irar.craftmatter.handlers.ItemHandler;
+import com.irar.craftmatter.network.GuiHandler;
+import com.irar.craftmatter.tileentity.ModTileEntities;
 
 import net.minecraft.client.main.Main;
 import net.minecraft.entity.item.EntityItem;
@@ -55,9 +58,8 @@ public class CommonProxy implements IProxy{
 		ItemHandler.register();
 		BlockHandler.init();
 		BlockHandler.register();
-//		TileEntities.init();
-
-//		NetworkRegistry.INSTANCE.registerGuiHandler(ReCards.instance, new GuiHandler());
+		ModTileEntities.init();
+		NetworkRegistry.INSTANCE.registerGuiHandler(CraftMatter.instance, new GuiHandler());
 		
 	}
 

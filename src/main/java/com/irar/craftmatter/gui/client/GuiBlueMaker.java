@@ -27,7 +27,7 @@ public class GuiBlueMaker extends GuiContainer {
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-        this.mc.getTextureManager().bindTexture(new ResourceLocation("iron:textures/gui/container/tile_entity_ore_gen.png"));
+        this.mc.getTextureManager().bindTexture(new ResourceLocation("craftmatter:textures/gui/container/tile_blue_maker.png"));
         this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
     }
     
@@ -48,8 +48,9 @@ public class GuiBlueMaker extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
-        this.fontRenderer.drawString(this.te.getDisplayName().getUnformattedText(), 8, 4, 4210752);
-        this.fontRenderer.drawString(this.playerInv.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
+        this.fontRenderer.drawString(this.te.getDisplayName().getUnformattedText(), 8, 4, 0);
+        this.fontRenderer.drawString("Units Of Matter: " + this.te.getAmountMatter(), 8, 44, 0);
+        this.fontRenderer.drawString(this.playerInv.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 0);
     }
     
 }

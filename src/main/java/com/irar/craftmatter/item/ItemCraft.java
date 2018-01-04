@@ -58,4 +58,10 @@ public class ItemCraft extends Item{
 		return amount;
 	}
 
+	public static void setAmount(ItemStack matter, int i) {
+		NBTTagCompound compound = matter.getTagCompound();
+		compound.setInteger(AMOUNT_KEY, i);
+		matter.setTagCompound(compound);
+	}
+
 }
