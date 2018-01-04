@@ -3,6 +3,7 @@ package com.irar.craftmatter.crafting;
 import java.util.function.Consumer;
 
 import com.irar.craftmatter.handlers.ItemHandler;
+import com.irar.craftmatter.item.ItemAntiCraft;
 import com.irar.craftmatter.item.ItemCraft;
 import com.irar.craftmatter.proxy.CommonProxy;
 
@@ -58,6 +59,8 @@ public class CraftMatterRecipe implements IRecipe{
 		
 		if(value > 0) {
 			return ItemCraft.getCraftMatterWithUnits(value);
+		}else if(value < 0) {
+			return ItemAntiCraft.getCraftAntiMatterWithUnits(- value);
 		}else {
 			return ItemStack.EMPTY;
 		}

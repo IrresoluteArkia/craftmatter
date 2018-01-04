@@ -2,6 +2,7 @@ package com.irar.craftmatter.crafting;
 
 import java.util.ArrayList;
 
+import com.irar.craftmatter.item.ItemAntiCraft;
 import com.irar.craftmatter.item.ItemCraft;
 
 import net.minecraft.block.Block;
@@ -61,6 +62,8 @@ public class UnitMapping {
 		
 		if(itemstack.getItem() instanceof ItemCraft) {
 			value = ItemCraft.getAmount(itemstack);
+		}else if(itemstack.getItem() instanceof ItemAntiCraft) {
+			value = - ItemAntiCraft.getAmount(itemstack);
 		}else {
 			for(int i = 0; i < registryNames.size(); i++) {
 				if(registryNames.get(i).equals(name)) {
