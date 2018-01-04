@@ -74,7 +74,7 @@ public class BlueMaker extends Block implements ITileEntityProvider{
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 	    if (!world.isRemote) {
-	        player.openGui(CraftMatter.instance, GuiHandler.TILE_ENTITY_ORE_GEN_GUI, world, pos.getX(), pos.getY(), pos.getZ());
+	        player.openGui(CraftMatter.instance, GuiHandler.TILE_BLUE_MAKER_GUI, world, pos.getX(), pos.getY(), pos.getZ());
 	    }
 	    return true;
 	}
