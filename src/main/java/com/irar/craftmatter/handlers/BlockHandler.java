@@ -1,6 +1,6 @@
 package com.irar.craftmatter.handlers;
 
-import com.irar.craftmatter.block.DimBlock;
+import com.irar.craftmatter.block.BlueMaker;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -15,24 +15,24 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 public class BlockHandler {
-	public static Block DimMarker;
-	public static ItemBlock ibDimMarker;
+	public static Block blueprintMaker;
+	public static ItemBlock ibBlueprintMaker;
 	public static void init(){
-		DimMarker = new DimBlock(Material.LEAVES, "dim_marker", 0F, 0F);
-		ibDimMarker = (ItemBlock) new ItemBlock(DimMarker);
+		blueprintMaker = new BlueMaker(Material.ROCK, "blueprint_maker", 7.0F, 7.0F, 0, "pickaxe");
+		ibBlueprintMaker = (ItemBlock) new ItemBlock(blueprintMaker);
 	}
 	
 	public static void register(){
-		ibDimMarker.setRegistryName(DimMarker.getRegistryName());
+		ibBlueprintMaker.setRegistryName(blueprintMaker.getRegistryName());
 		
-		ForgeRegistries.BLOCKS.register(DimMarker);
-		ForgeRegistries.ITEMS.register(ibDimMarker);
+		ForgeRegistries.BLOCKS.register(blueprintMaker);
+		ForgeRegistries.ITEMS.register(ibBlueprintMaker);
 		
 	}
 	
 	public static void registerRenders(){
-		registerRender(DimMarker);
-		ItemHandler.registerRender(ibDimMarker);
+		registerRender(blueprintMaker);
+		ItemHandler.registerRender(ibBlueprintMaker);
 	}
 	
 	public static void registerRender(Block block){
