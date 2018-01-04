@@ -34,7 +34,6 @@ public class ItemCraft extends Item{
 		ItemStack itemstack = new ItemStack(ItemHandler.craftMatter, 1);
 		itemstack.setTagCompound(new NBTTagCompound());
 		itemstack.getTagCompound().setInteger(AMOUNT_KEY, amount);
-		System.out.println("Adding tier to itemstack");
 		return itemstack;
 	}
 	
