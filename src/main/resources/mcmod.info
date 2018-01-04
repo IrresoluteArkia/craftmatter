@@ -1,0 +1,16 @@
+[
+{
+  "modid": "craftmatter",
+  "name": "Craft Matter",
+  "description": "Adds crafted matter and uses all unused crafting recipes",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["IrresoluteArkia"],
+  "credits": "...",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
