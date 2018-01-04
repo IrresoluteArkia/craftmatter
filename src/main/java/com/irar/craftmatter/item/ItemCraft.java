@@ -43,7 +43,7 @@ public class ItemCraft extends Item{
 		
 		if(stack.hasTagCompound() && stack.getTagCompound().hasKey(AMOUNT_KEY)){
 			int amount = stack.getTagCompound().getInteger(AMOUNT_KEY);
-			tooltip.add("Contains " + amount + "Units Of Matter");
+			tooltip.add("Contains " + amount + " Units Of Matter");
 		}else{
 			tooltip.add("Invalid Units: please get this item through proper methods e.g. practically any crafting recipe!");
 		}
