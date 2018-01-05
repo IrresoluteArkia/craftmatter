@@ -1,6 +1,7 @@
 package com.irar.craftmatter.proxy;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.irar.craftmatter.CraftMatter;
@@ -10,16 +11,22 @@ import com.irar.craftmatter.client.renderer.factory.FactoryGrenade;
 import com.irar.craftmatter.handlers.BlockHandler;
 import com.irar.craftmatter.handlers.CraftingHandler;
 import com.irar.craftmatter.handlers.ItemHandler;
+import com.irar.craftmatter.network.CraftMessage;
+import com.irar.craftmatter.network.CraftMessageHandler;
+import com.irar.craftmatter.network.CraftPacketHandler;
 import com.irar.craftmatter.network.GuiHandler;
 import com.irar.craftmatter.tileentity.ModTileEntities;
+import com.irar.craftmatter.tileentity.TileBlueMaker;
 
 import net.minecraft.client.main.Main;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
@@ -64,7 +71,8 @@ public class CommonProxy implements IProxy{
 		ModTileEntities.init();
 		NetworkRegistry.INSTANCE.registerGuiHandler(CraftMatter.instance, new GuiHandler());
 		RenderingRegistry.registerEntityRenderingHandler(EntityGrenade.class, new FactoryGrenade());
-		
+		CraftPacketHandler.INSTANCE.registerMessage(CraftMessageHandler.class, CraftMessage.class, 0, Side.SERVER);
+		CraftPacketHandler.INSTANCE.registerMessage(CraftMessageHandler.class, CraftMessage.class, 1, Side.CLIENT);
 	}
 
 	@Override
@@ -84,12 +92,31 @@ public class CommonProxy implements IProxy{
 		}
 
 //		@SubscribeEvent
-/*		public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event){
-			if(!event.player.world.isRemote){
-				saveData = SaveDataHandler.get(event.player.world);
-				DimensionHandler.registerCustom();
+		public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event){
+			if(!event.player.world.isRemote) {
+				EntityPlayerMP player = (EntityPlayerMP) event.player;
+				ArrayList<TileBlueMaker> tiles = TileBlueMaker.tiles;
+				ArrayList<Integer> data = new ArrayList<Integer>();
+				for(TileEntity te : tiles) {
+					if(te instanceof TileBlueMaker) {
+						TileBlueMaker bm = (TileBlueMaker) te;
+						BlockPos pos = bm.getPos();
+						int x = pos.getX();
+						int y = pos.getY();
+						int z = pos.getZ();
+						int amount = bm.amountMatter;
+						int tick = bm.tickNum;
+						data.add(x);
+						data.add(y);
+						data.add(z);
+						data.add(amount);
+						data.add(tick);
+					}
+				}
+				CraftMessage message = new CraftMessage(data);
+				CraftPacketHandler.INSTANCE.sendTo(message, player);
 			}
-		}*/
+		}
  /*       @SubscribeEvent
         public void entTick(final LivingEvent.LivingUpdateEvent event) {
             if (event.getEntity().world.isRemote) {
@@ -111,6 +138,29 @@ public class CommonProxy implements IProxy{
         	
         }*/
 
+	}
+
+	public static void updatePacket() {
+		ArrayList<TileBlueMaker> tiles = TileBlueMaker.tiles;
+		ArrayList<Integer> data = new ArrayList<Integer>();
+		for(TileEntity te : tiles) {
+			if(te instanceof TileBlueMaker) {
+				TileBlueMaker bm = (TileBlueMaker) te;
+				BlockPos pos = bm.getPos();
+				int x = pos.getX();
+				int y = pos.getY();
+				int z = pos.getZ();
+				int amount = bm.amountMatter;
+				int tick = bm.tickNum;
+				data.add(x);
+				data.add(y);
+				data.add(z);
+				data.add(amount);
+				data.add(tick);
+			}
+		}
+		CraftMessage message = new CraftMessage(data);
+		CraftPacketHandler.INSTANCE.sendToAll(message);
 	}
 
 }

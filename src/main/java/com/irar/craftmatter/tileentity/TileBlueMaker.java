@@ -6,6 +6,7 @@ import java.util.Random;
 import com.irar.craftmatter.crafting.UnitMapping;
 import com.irar.craftmatter.handlers.ItemHandler;
 import com.irar.craftmatter.item.ItemCraft;
+import com.irar.craftmatter.proxy.CommonProxy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,12 +29,13 @@ import net.minecraftforge.oredict.OreDictionary;
 public class TileBlueMaker extends TileEntity implements ITickable, IInventory{
 	
 	private Random rand = new Random();
-	private int tickNum = 0;
+	public int tickNum = 0;
     private NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(3, ItemStack.EMPTY);
     private String customName = "Blueprint Maker";
-	private int amountMatter;
+	public int amountMatter;
 	private int matterNeeded = 0;
 	private boolean isValid = false;
+	public static ArrayList<TileBlueMaker> tiles = new ArrayList<TileBlueMaker>();
     
     public TileBlueMaker(){
 /*    	if(Minecraft.getMinecraft().world.isRemote) {
@@ -52,6 +54,12 @@ public class TileBlueMaker extends TileEntity implements ITickable, IInventory{
 	@Override
 	public void update() {
 		tickNum++;
+		if(!tiles.contains(this)) {
+			tiles.add(this);
+			if(!this.world.isRemote) {
+				CommonProxy.updatePacket();
+			}
+		}
 /*		if(this.tickNum % 20 == 0) {
 			System.out.println(this.amountMatter);
 		}*/
