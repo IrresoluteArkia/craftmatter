@@ -5,6 +5,8 @@ import java.util.Random;
 
 import com.irar.craftmatter.CraftMatter;
 import com.irar.craftmatter.crafting.Mapper;
+import com.irar.craftmatter.entity.projectile.EntityGrenade;
+import com.irar.craftmatter.client.renderer.factory.FactoryGrenade;
 import com.irar.craftmatter.handlers.BlockHandler;
 import com.irar.craftmatter.handlers.CraftingHandler;
 import com.irar.craftmatter.handlers.ItemHandler;
@@ -31,6 +33,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -60,6 +63,7 @@ public class CommonProxy implements IProxy{
 		BlockHandler.register();
 		ModTileEntities.init();
 		NetworkRegistry.INSTANCE.registerGuiHandler(CraftMatter.instance, new GuiHandler());
+		RenderingRegistry.registerEntityRenderingHandler(EntityGrenade.class, new FactoryGrenade());
 		
 	}
 
