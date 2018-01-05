@@ -3,6 +3,7 @@ package com.irar.craftmatter.tileentity;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.irar.craftmatter.crafting.UnitMapping;
 import com.irar.craftmatter.handlers.ItemHandler;
 import com.irar.craftmatter.item.ItemCraft;
 
@@ -31,6 +32,8 @@ public class TileBlueMaker extends TileEntity implements ITickable, IInventory{
     private NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(3, ItemStack.EMPTY);
     private String customName = "Blueprint Maker";
 	private int amountMatter;
+	private int matterNeeded = 0;
+	private boolean isValid = false;
     
     public TileBlueMaker(){
 /*    	if(Minecraft.getMinecraft().world.isRemote) {
@@ -49,8 +52,16 @@ public class TileBlueMaker extends TileEntity implements ITickable, IInventory{
 	@Override
 	public void update() {
 		tickNum++;
-		if(this.tickNum % 20 == 0) {
+/*		if(this.tickNum % 20 == 0) {
 			System.out.println(this.amountMatter);
+		}*/
+		ItemStack toMake = inventory.get(0);
+		if(!toMake.isEmpty() && UnitMapping.hasValueFor(toMake)) {
+			isValid = true;
+			matterNeeded = UnitMapping.getValueFor(toMake);
+		}else {
+			isValid = false;
+			matterNeeded = 0;
 		}
 		ItemStack matter = inventory.get(1);
 		if(!matter.isEmpty() && matter.getItem() instanceof ItemCraft) {
@@ -223,6 +234,14 @@ public class TileBlueMaker extends TileEntity implements ITickable, IInventory{
 
 	public int getAmountMatter() {
 		return this.amountMatter ;
+	}
+
+	public int getMatterNeeded() {
+		return this.matterNeeded ;
+	}
+	
+	public boolean isValidRecipe() {
+		return isValid;
 	}
 
     

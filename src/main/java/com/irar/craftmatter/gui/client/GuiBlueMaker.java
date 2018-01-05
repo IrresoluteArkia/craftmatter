@@ -49,7 +49,10 @@ public class GuiBlueMaker extends GuiContainer {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
         this.fontRenderer.drawString(this.te.getDisplayName().getUnformattedText(), 8, 4, 0);
-        this.fontRenderer.drawString("Units Of Matter: " + this.te.getAmountMatter(), 8, 44, 0);
+        this.fontRenderer.drawString("Units Of Matter: " + this.te.getAmountMatter(), 8, 34, 0);
+        if(this.te.isValidRecipe()) {
+        	this.fontRenderer.drawString("Matter Needed: " + this.te.getMatterNeeded(), 8, 44, 0);
+        }
         this.fontRenderer.drawString(this.playerInv.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 0);
     }
     

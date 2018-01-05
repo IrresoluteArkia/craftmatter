@@ -75,5 +75,25 @@ public class UnitMapping {
 		return value;
 	}
 
+	public static boolean hasValueFor(ItemStack itemstack) {
+		if(itemstack.isEmpty()) {
+			return false;
+		}
+		ResourceLocation name = itemstack.getItem().getRegistryName();
+		
+		if(itemstack.getItem() instanceof ItemCraft) {
+			return false;
+		}else if(itemstack.getItem() instanceof ItemAntiCraft) {
+			return false;
+		}else {
+			for(int i = 0; i < registryNames.size(); i++) {
+				if(registryNames.get(i).equals(name)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	
 }
