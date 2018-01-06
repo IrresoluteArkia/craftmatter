@@ -49,7 +49,7 @@ public class ItemBlueprint extends Item{
 			ItemStack itemstack = new ItemStack(stackData);
 			tooltip.add("Contains Blueprint For: " + itemstack.getItem().getItemStackDisplayName(itemstack));
 			if(stack.getTagCompound().hasKey(AMOUNT_KEY)) {
-				tooltip.add("Requires " + stackData.getInteger(AMOUNT_KEY) + " Units Of Antimatter To Print");
+				tooltip.add("Requires " + stack.getTagCompound().getInteger(AMOUNT_KEY) + " Units Of Antimatter To Print");
 			}else {
 				tooltip.add("Invalid Antimatter Amount: This Can NOT Be Printed");
 			}
