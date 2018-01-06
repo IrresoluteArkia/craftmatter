@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.irar.craftmatter.item.ItemAntiCraft;
+import com.irar.craftmatter.item.ItemBlueprint;
 import com.irar.craftmatter.item.ItemCraft;
 import com.irar.craftmatter.item.ItemGrenade;
 
@@ -20,15 +21,18 @@ public class ItemHandler {
 	public static Item craftMatter;
 	public static Item craftAntiMatter;
 	public static Item antiGrenade;
+	public static Item blueprint;
 	
 	public static void init(){
 		craftMatter = new ItemCraft("crafted_matter");
 		craftAntiMatter = new ItemAntiCraft("crafted_antimatter");
 		antiGrenade = new ItemGrenade("antimatter_grenade");
+		blueprint = new ItemBlueprint("blueprint");
 		
 		allItems.add(craftMatter);
 		allItems.add(craftAntiMatter);
 		allItems.add(antiGrenade);
+		allItems.add(blueprint);
 	}
 	
 	public static void register(){

@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.irar.craftmatter.crafting.UnitMapping;
 import com.irar.craftmatter.handlers.ItemHandler;
+import com.irar.craftmatter.item.ItemBlueprint;
 import com.irar.craftmatter.item.ItemCraft;
 import com.irar.craftmatter.proxy.CommonProxy;
 
@@ -72,6 +73,7 @@ public class TileBlueMaker extends TileEntity implements ITickable, IInventory{
 			matterNeeded = 0;
 		}
 		ItemStack matter = inventory.get(1);
+		ItemStack result = inventory.get(2);
 		if(!matter.isEmpty() && matter.getItem() instanceof ItemCraft) {
 			this.amountMatter += matter.getCount();
 			if(ItemCraft.getAmount(matter) == 1) {
@@ -79,6 +81,19 @@ public class TileBlueMaker extends TileEntity implements ITickable, IInventory{
 			}else {
 				ItemCraft.setAmount(matter, ItemCraft.getAmount(matter) - 1);
 			}
+			this.markDirty();
+		}
+		if(result.isEmpty() && isValid && matterNeeded < amountMatter) {
+			amountMatter -= matterNeeded;
+			if(toMake.getCount() > 1) {
+				toMake.setCount(toMake.getCount() - 1);
+				inventory.set(0, toMake);
+			}else {
+				inventory.set(0, ItemStack.EMPTY);
+			}
+			ItemStack toStore = toMake.copy();
+			toStore.setCount(1);
+			inventory.set(2, ItemBlueprint.getBlueprintWithItemStack(toStore, UnitMapping.getValueFor(toStore)));
 			this.markDirty();
 		}
 	}
