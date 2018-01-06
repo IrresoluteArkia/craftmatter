@@ -35,6 +35,7 @@ public class CraftMessageHandler implements IMessageHandler<CraftMessage, IMessa
 				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(pos);
 				if(te instanceof TileBlueMaker) {
 					TileBlueMaker bm = (TileBlueMaker) te;
+					bm.readFromNBT(bm.serializeNBT());
 					bm.amountMatter = amount;
 					bm.tickNum = tick;
 				}

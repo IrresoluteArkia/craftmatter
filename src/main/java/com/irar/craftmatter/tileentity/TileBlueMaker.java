@@ -37,6 +37,7 @@ public class TileBlueMaker extends TileEntity implements ITickable, IInventory{
 	private int matterNeeded = 0;
 	private boolean isValid = false;
 	public static ArrayList<TileBlueMaker> tiles = new ArrayList<TileBlueMaker>();
+	private boolean nbtserialized = false;
     
     public TileBlueMaker(){
 /*    	if(Minecraft.getMinecraft().world.isRemote) {
@@ -60,6 +61,7 @@ public class TileBlueMaker extends TileEntity implements ITickable, IInventory{
 			if(!this.world.isRemote) {
 				CommonProxy.updatePacket();
 			}
+			this.readFromNBT(this.writeToNBT(new NBTTagCompound()));
 		}
 /*		if(this.tickNum % 20 == 0) {
 			System.out.println(this.amountMatter);

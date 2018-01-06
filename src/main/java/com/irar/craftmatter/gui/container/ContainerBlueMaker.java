@@ -57,14 +57,14 @@ public class ContainerBlueMaker extends Container{
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            if (fromSlot < 9)
+            if (fromSlot < 3)
             {
-                if (!this.mergeItemStack(itemstack1, 9, 45, true))
+                if (!this.mergeItemStack(itemstack1, 3, 39, true))
                 {
                     return ItemStack.EMPTY;
                 }
             }
-            else if (!this.mergeItemStack(itemstack1, 0, 9, false))
+            else if (!this.mergeItemStack(itemstack1, 0, 3, false))
             {
                 return ItemStack.EMPTY;
             }
