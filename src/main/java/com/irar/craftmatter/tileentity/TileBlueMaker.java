@@ -67,7 +67,7 @@ public class TileBlueMaker extends TileEntity implements ITickable, IInventory{
 		ItemStack toMake = inventory.get(0);
 		if(!toMake.isEmpty() && UnitMapping.hasValueFor(toMake)) {
 			isValid = true;
-			matterNeeded = UnitMapping.getValueFor(toMake);
+			matterNeeded = (int) (Math.pow(UnitMapping.getValueFor(toMake), 2.0 / 3.0) * 6);
 		}else {
 			isValid = false;
 			matterNeeded = 0;
