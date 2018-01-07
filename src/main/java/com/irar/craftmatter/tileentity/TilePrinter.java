@@ -6,6 +6,7 @@ import java.util.Random;
 import com.irar.craftmatter.crafting.UnitMapping;
 import com.irar.craftmatter.handlers.ItemHandler;
 import com.irar.craftmatter.item.ItemAntiCraft;
+import com.irar.craftmatter.item.ItemAntiItem;
 import com.irar.craftmatter.item.ItemBlueprint;
 import com.irar.craftmatter.item.ItemCraft;
 import com.irar.craftmatter.proxy.CommonProxy;
@@ -99,23 +100,23 @@ public class TilePrinter extends TileEntity implements ITickable, IInventory{
 		}
 		ItemStack matter = inventory.get(1);
 		ItemStack result = inventory.get(2);
-		if(!matter.isEmpty() && matter.getItem() instanceof ItemCraft) {
+		if(!matter.isEmpty() && matter.getItem() instanceof ItemAntiCraft) {
 			this.amountMatter += matter.getCount();
-			if(ItemCraft.getAmount(matter) == 1) {
+			if(ItemAntiCraft.getAmount(matter) == 1) {
 				inventory.set(1, ItemStack.EMPTY);
 			}else {
-				ItemCraft.setAmount(matter, ItemCraft.getAmount(matter) - 1);
+				ItemAntiCraft.setAmount(matter, ItemAntiCraft.getAmount(matter) - 1);
 			}
 			this.markDirty();
 		}
-		if((result.isEmpty() || (result.getItem().equals(resultItem.getItem()) && result.getCount() < 64)) && isValid && matterNeeded < amountMatter) {
+		if((result.isEmpty() || (result.getItem() instanceof ItemAntiItem && ItemAntiItem.getContainedItemStack(result).getItem().equals(resultItem.getItem())) && result.getCount() < 64) && isValid && matterNeeded < amountMatter) {
 			amountMatter -= matterNeeded;
-			if(result.getItem().equals(resultItem.getItem())) {
-				ItemStack toStore = resultItem.copy();
+			if(result.getItem() instanceof ItemAntiItem && ItemAntiItem.getContainedItemStack(result).getItem().equals(resultItem.getItem())) {
+				ItemStack toStore = result.copy();
 				toStore.setCount(inventory.get(2).getCount() + 1);
 				inventory.set(2, toStore);
 			}else {
-				inventory.set(2, resultItem);
+				inventory.set(2, ItemAntiItem.getWithItemStack(resultItem));
 			}
 			this.markDirty();
 		}
