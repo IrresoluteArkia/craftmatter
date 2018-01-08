@@ -86,7 +86,7 @@ public class TilePrinter extends TileBase{
 			amountMatter -= matterNeeded;
 			if(result.getItem() instanceof ItemAntiItem && ItemAntiItem.getContainedItemStack(result).getItem().equals(resultItem.getItem())) {
 				ItemStack toStore = result.copy();
-				toStore.setCount(inventory.get(2).getCount() + 1);
+				toStore.setCount(inventory.get(3).getCount() + 1);
 				inventory.set(3, toStore);
 			}else {
 				inventory.set(3, ItemAntiItem.getWithItemStack(resultItem));

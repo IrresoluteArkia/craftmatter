@@ -75,6 +75,7 @@ public class TileBase extends TileEntity implements ITickable, IInventory{
 			int matter = this.getAmountMatterFromItemStack();
 			if(this.amountMatter == 0 && matter > 0) {
 				this.amountMatter = matter;
+				matterSet = true;
 			}
 		}
 		/*if(!matterLoaded) {
