@@ -37,6 +37,11 @@ public class EntityGrenade extends EntityThrowable
         super(worldIn, throwerIn);
         this.antimatterRemaining = amount;
     }
+    public EntityGrenade(World worldIn, EntityLivingBase throwerIn)
+    {
+        super(worldIn, throwerIn);
+        this.antimatterRemaining = 100;
+    }
 
     public EntityGrenade(World worldIn, double x, double y, double z)
     {

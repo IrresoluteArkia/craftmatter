@@ -92,7 +92,7 @@ public class CommonProxy implements IProxy{
 		}
 
 //		@SubscribeEvent
-		public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event){
+/*		public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event){
 			if(!event.player.world.isRemote) {
 				EntityPlayerMP player = (EntityPlayerMP) event.player;
 				ArrayList<TileBlueMaker> tiles = TileBlueMaker.tiles;
@@ -116,7 +116,7 @@ public class CommonProxy implements IProxy{
 				CraftMessage message = new CraftMessage(data);
 				CraftPacketHandler.INSTANCE.sendTo(message, player);
 			}
-		}
+		}*/
  /*       @SubscribeEvent
         public void entTick(final LivingEvent.LivingUpdateEvent event) {
             if (event.getEntity().world.isRemote) {
@@ -139,7 +139,7 @@ public class CommonProxy implements IProxy{
         }*/
 
 	}
-
+/*
 	public static void updatePacket() {
 		ArrayList<TileBlueMaker> tiles = TileBlueMaker.tiles;
 		ArrayList<Integer> data = new ArrayList<Integer>();
@@ -159,6 +159,16 @@ public class CommonProxy implements IProxy{
 				data.add(tick);
 			}
 		}
+		CraftMessage message = new CraftMessage(data);
+		CraftPacketHandler.INSTANCE.sendToAll(message);
+	}*/
+
+	public static void updateData(int x, int y, int z, int amountMatter) {
+		ArrayList<Integer> data = new ArrayList<Integer>();
+		data.add(x);
+		data.add(y);
+		data.add(z);
+		data.add(amountMatter);
 		CraftMessage message = new CraftMessage(data);
 		CraftPacketHandler.INSTANCE.sendToAll(message);
 	}

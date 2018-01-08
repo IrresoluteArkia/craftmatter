@@ -29,42 +29,15 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class TilePrinter extends TileEntity implements ITickable, IInventory{
+public class TilePrinter extends TileBase{
 	
-	private Random rand = new Random();
-	public int tickNum = 0;
-    private NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(3, ItemStack.EMPTY);
-    private String customName = "Antimatter Printer";
-	public int amountMatter;
-	private int matterNeeded = 100;
-	private boolean isValid = true;
-	public static ArrayList<TilePrinter> tiles = new ArrayList<TilePrinter>();
-	private boolean nbtserialized = false;
-    
     public TilePrinter(){
-/*    	if(Minecraft.getMinecraft().world.isRemote) {
-    		
-    	}*/
-    }
-
-    public String getCustomName() {
-        return this.customName;
-    }
-
-    public void setCustomName(String customName) {
-        this.customName = customName;
+    	super("Antimatter Printer", 4, false);
     }
     
 	@Override
 	public void update() {
-		tickNum++;
-		if(!tiles.contains(this)) {
-			tiles.add(this);
-			if(!this.world.isRemote) {
-				CommonProxy.updatePacket();
-			}
-			this.readFromNBT(this.writeToNBT(new NBTTagCompound()));
-		}
+		super.update();
 /*		ItemStack result = inventory.get(1);
 		ItemStack matter = inventory.get(0);
 		if(!matter.isEmpty() && matter.getItem() instanceof ItemCraft) {
@@ -87,7 +60,7 @@ public class TilePrinter extends TileEntity implements ITickable, IInventory{
 		}*///accidentally wrote code for something else here... oops
 		//   will definitely move it later
 		ItemStack resultItem = ItemStack.EMPTY;
-		ItemStack toMake = inventory.get(0);
+		ItemStack toMake = inventory.get(1);
 		if(!toMake.isEmpty() && toMake.getItem() instanceof ItemBlueprint) {
 			if(ItemBlueprint.getAmount(toMake) > 0) {
 				isValid = true;
@@ -98,12 +71,12 @@ public class TilePrinter extends TileEntity implements ITickable, IInventory{
 			isValid = false;
 			matterNeeded = 0;
 		}
-		ItemStack matter = inventory.get(1);
-		ItemStack result = inventory.get(2);
+		ItemStack matter = inventory.get(2);
+		ItemStack result = inventory.get(3);
 		if(!matter.isEmpty() && matter.getItem() instanceof ItemAntiCraft) {
 			this.amountMatter += matter.getCount();
 			if(ItemAntiCraft.getAmount(matter) == 1) {
-				inventory.set(1, ItemStack.EMPTY);
+				inventory.set(2, ItemStack.EMPTY);
 			}else {
 				ItemAntiCraft.setAmount(matter, ItemAntiCraft.getAmount(matter) - 1);
 			}
@@ -114,183 +87,13 @@ public class TilePrinter extends TileEntity implements ITickable, IInventory{
 			if(result.getItem() instanceof ItemAntiItem && ItemAntiItem.getContainedItemStack(result).getItem().equals(resultItem.getItem())) {
 				ItemStack toStore = result.copy();
 				toStore.setCount(inventory.get(2).getCount() + 1);
-				inventory.set(2, toStore);
+				inventory.set(3, toStore);
 			}else {
-				inventory.set(2, ItemAntiItem.getWithItemStack(resultItem));
+				inventory.set(3, ItemAntiItem.getWithItemStack(resultItem));
 			}
 			this.markDirty();
 		}
 
 	}
-
-	@Override
-	public String getName() {
-	    return this.hasCustomName() ? this.customName : "container.tile_entity_anti_printer";
-	}
-	
-	@Override
-	public boolean hasCustomName() {
-	    return this.customName != null && !this.customName.equals("");
-	}
-
-	@Override
-	public int getSizeInventory() {
-		return 3;
-	}
-
-	public static int getSizeInventory(int i) {
-		return 3;
-	}
-
-	@Override
-    public boolean isEmpty()
-    {
-        for (ItemStack itemstack : this.inventory)
-        {
-            if (!itemstack.isEmpty())
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-	@Override
-	public ItemStack getStackInSlot(int index) {
-	    if (index < 0 || index >= this.getSizeInventory())
-	        return null;
-	    return this.inventory.get(index);
-	}
-	
-	@Override
-	public ItemStack decrStackSize(int index, int count) {
-        ItemStack itemstack = ItemStackHelper.getAndSplit(this.inventory, index, count);
-
-        if (!itemstack.isEmpty())
-        {
-            this.markDirty();
-        }
-
-        return itemstack;
-
-	}
-	
-	@Override
-	public ItemStack removeStackFromSlot(int index) {
-	    ItemStack stack = this.getStackInSlot(index);
-	    this.setInventorySlotContents(index, null);
-        this.markDirty();
-	    return stack;
-	}
-	
-	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) {
-        this.inventory.set(index, stack);
-
-        if (stack.getCount() > this.getInventoryStackLimit())
-        {
-            stack.setCount(this.getInventoryStackLimit());
-        }
-
-        this.markDirty();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 64;
-	}
-
-	@Override
-	public boolean isUsableByPlayer(EntityPlayer player) {
-//	    return this.worldObj.getTileEntity(this.getPos()) == this && player.getDistanceSq(this.pos.add(0.5, 0.5, 0.5)) <= 64;
-		return true;
-	}
-	
-	@Override
-	public void openInventory(EntityPlayer player) {
-		
-	}
-
-	@Override
-	public void closeInventory(EntityPlayer player) {
-		
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int index, ItemStack stack) {
-		return true;
-	}
-
-	@Override
-	public int getField(int id) {
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value) {
-		
-	}
-
-	@Override
-	public int getFieldCount() {
-		return 0;
-	}
-
-	@Override
-	public void clear() {
-		for (int i = 0; i < this.getSizeInventory(); i++)
-	        this.setInventorySlotContents(i, null);
-	}
-
-    public void readFromNBT(NBTTagCompound compound)
-    {
-        super.readFromNBT(compound);
-        this.inventory = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
-
-        ItemStackHelper.loadAllItems(compound, this.inventory);
-
-        if (compound.hasKey("CustomName", 8))
-        {
-            this.customName = compound.getString("CustomName");
-        }
-        if (compound.hasKey("AMOUNT_MATTER"))
-        {
-            this.amountMatter = compound.getInteger("AMOUNT_MATTER");
-        }
-    }
-
-    public NBTTagCompound writeToNBT(NBTTagCompound compound)
-    {
-
-        ItemStackHelper.saveAllItems(compound, this.inventory);
-
-        if (this.hasCustomName())
-        {
-            compound.setString("CustomName", this.customName);
-        }
-        compound.setInteger("AMOUNT_MATTER", this.amountMatter);
-
-        
-        return super.writeToNBT(compound);
-    }
-    
-	@Override
-	public ITextComponent getDisplayName() {
-        return (ITextComponent)(this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName(), new Object[0]));
-	}
-
-	public int getAmountMatter() {
-		return this.amountMatter ;
-	}
-
-	public int getMatterNeeded() {
-		return this.matterNeeded ;
-	}
-	
-	public boolean isValidRecipe() {
-		return isValid;
-	}
-
     
 }
