@@ -9,6 +9,7 @@ import com.irar.craftmatter.network.GuiHandler;
 import com.irar.craftmatter.tileentity.TileCondenser;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockSlab;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -27,6 +28,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class AntiCondenser extends Block implements ITileEntityProvider{
+    protected static final AxisAlignedBB BOTTOM_HALF = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D);
 	public AntiCondenser(Material mat, String name, float hardness, float resistance, int harvest, String tool){
 		super(mat);
 		setUnlocalizedName(name);
@@ -35,6 +37,28 @@ public class AntiCondenser extends Block implements ITileEntityProvider{
 		setHardness(hardness);
 		setResistance(resistance);
 		setHarvestLevel(tool, harvest);
+		this.setLightOpacity(0);
+	}
+	
+	@Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+    {
+        return BOTTOM_HALF;
+    }
+
+	@Override
+	public boolean isFullBlock(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean isFullCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
 	}
 
 	@Override

@@ -21,4 +21,11 @@ public class GuiInverter extends GuiBase {
 	    super(playerInv, te, ContainerInverter.class, "antimatter_inverter");
 	}
 	
+    @Override
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
+    {
+        this.fontRenderer.drawString(this.te.getDisplayName().getUnformattedText(), 8, 4, 16777215);
+        this.fontRenderer.drawString(this.playerInv.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 16777215);
+    }
+
 }

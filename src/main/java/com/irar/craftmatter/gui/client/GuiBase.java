@@ -16,8 +16,8 @@ import net.minecraft.util.ResourceLocation;
 
 public class GuiBase extends GuiContainer {
 
-	private IInventory playerInv;
-	private TileBase te;
+	protected IInventory playerInv;
+	protected TileBase te;
 	private String nameWithUnderscore;
 //	private Class<? extends ContainerBase> containerClass = ContainerBase.class;
 

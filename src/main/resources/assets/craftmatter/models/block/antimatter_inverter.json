@@ -3,8 +3,8 @@
     "__createdwith": "opl's Model Creator",
     "ambientocclusion": true,
     "textures": {
-        "side": "craftmatter:blocks/blueprint_maker_side",
-        "particle": "craftmatter:blocks/blueprint_maker"
+        "top": "craftmatter:blocks/antimatter_inverter_top",
+        "particle": "craftmatter:blocks/antimatter_inverter"
     },
     "elements": [
         {
@@ -12,22 +12,22 @@
             "to": [16,16,16],
             "faces": {
                 "up": {
-                    "texture": "#particle"
+                    "texture": "#top"
                 },
                 "down": {
-                    "texture": "#side"
+                    "texture": "#top"
                 },
                 "west": {
-                    "texture": "#side"
+                    "texture": "#particle"
                 },
                 "east": {
-                    "texture": "#side"
+                    "texture": "#particle"
                 },
                 "north": {
-                    "texture": "#side"
+                    "texture": "#particle"
                 },
                 "south": {
-                    "texture": "#side"
+                    "texture": "#particle"
                 }
             }
         }

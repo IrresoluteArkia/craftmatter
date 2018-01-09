@@ -69,7 +69,7 @@ public class ItemAntiItem extends Item implements ItemMeshDefinition{
 			ItemStack itemstack = new ItemStack(stackData);
 			return "Antimatter " + itemstack.getItem().getItemStackDisplayName(itemstack);
 		}
-		return "hmmm...";
+		return "Antimatter Item";
 	}
 	
 	@Override

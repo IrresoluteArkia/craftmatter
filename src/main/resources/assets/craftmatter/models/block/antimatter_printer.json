@@ -4,7 +4,7 @@
     "ambientocclusion": true,
     "textures": {
         "printer": "craftmatter:blocks/antimatter_printer",
-        "texture": "craftmatter:blocks/antimatter_printer"
+        "particle": "craftmatter:blocks/antimatter_printer"
     },
     "elements": [
         {
