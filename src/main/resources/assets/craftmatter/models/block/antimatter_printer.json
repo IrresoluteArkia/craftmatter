@@ -1,0 +1,227 @@
+{
+    "parent": "minecraft:block/block",
+    "__createdwith": "opl's Model Creator",
+    "ambientocclusion": true,
+    "textures": {
+        "printer": "craftmatter:blocks/antimatter_printer",
+        "texture": "craftmatter:blocks/antimatter_printer"
+    },
+    "elements": [
+        {
+            "from": [0,0,0],
+            "to": [16,16,5],
+            "faces": {
+                "up": {
+                    "texture": "#printer"
+                },
+                "down": {
+                    "texture": "#printer"
+                },
+                "west": {
+                    "texture": "#printer"
+                },
+                "east": {
+                    "texture": "#printer"
+                },
+                "north": {
+                    "texture": "#printer"
+                },
+                "south": {
+                    "texture": "#printer"
+                }
+            }
+        },
+        {
+            "from": [0,0,11],
+            "to": [16,16,16],
+            "faces": {
+                "up": {
+                    "texture": "#printer"
+                },
+                "down": {
+                    "texture": "#printer"
+                },
+                "west": {
+                    "texture": "#printer"
+                },
+                "east": {
+                    "texture": "#printer"
+                },
+                "north": {
+                    "texture": "#printer"
+                },
+                "south": {
+                    "texture": "#printer"
+                }
+            }
+        },
+        {
+            "from": [10,0,5],
+            "to": [16,16,6],
+            "faces": {
+                "up": {
+                    "texture": "#printer"
+                },
+                "down": {
+                    "texture": "#printer"
+                },
+                "west": {
+                    "texture": "#printer"
+                },
+                "east": {
+                    "texture": "#printer"
+                },
+                "north": {
+                    "texture": "#printer"
+                },
+                "south": {
+                    "texture": "#printer"
+                }
+            }
+        },
+        {
+            "from": [11,0,6],
+            "to": [16,16,11],
+            "faces": {
+                "up": {
+                    "texture": "#printer"
+                },
+                "down": {
+                    "texture": "#printer"
+                },
+                "west": {
+                    "texture": "#printer"
+                },
+                "east": {
+                    "texture": "#printer"
+                },
+                "north": {
+                    "texture": "#printer"
+                },
+                "south": {
+                    "texture": "#printer"
+                }
+            }
+        },
+        {
+            "from": [0,0,10],
+            "to": [6,16,11],
+            "faces": {
+                "up": {
+                    "texture": "#printer"
+                },
+                "down": {
+                    "texture": "#printer"
+                },
+                "west": {
+                    "texture": "#printer"
+                },
+                "east": {
+                    "texture": "#printer"
+                },
+                "north": {
+                    "texture": "#printer"
+                },
+                "south": {
+                    "texture": "#printer"
+                }
+            }
+        },
+        {
+            "from": [0,0,8],
+            "to": [4,16,10],
+            "faces": {
+                "up": {
+                    "texture": "#printer"
+                },
+                "down": {
+                    "texture": "#printer"
+                },
+                "west": {
+                    "texture": "#printer"
+                },
+                "east": {
+                    "texture": "#printer"
+                },
+                "north": {
+                    "texture": "#printer"
+                },
+                "south": {
+                    "texture": "#printer"
+                }
+            }
+        },
+        {
+            "from": [0,0,6],
+            "to": [5,16,8],
+            "faces": {
+                "up": {
+                    "texture": "#printer"
+                },
+                "down": {
+                    "texture": "#printer"
+                },
+                "west": {
+                    "texture": "#printer"
+                },
+                "east": {
+                    "texture": "#printer"
+                },
+                "north": {
+                    "texture": "#printer"
+                },
+                "south": {
+                    "texture": "#printer"
+                }
+            }
+        },
+        {
+            "from": [0,0,5],
+            "to": [8,16,6],
+            "faces": {
+                "up": {
+                    "texture": "#printer"
+                },
+                "down": {
+                    "texture": "#printer"
+                },
+                "west": {
+                    "texture": "#printer"
+                },
+                "east": {
+                    "texture": "#printer"
+                },
+                "north": {
+                    "texture": "#printer"
+                },
+                "south": {
+                    "texture": "#printer"
+                }
+            }
+        },
+        {
+            "from": [4,0,5],
+            "to": [11,8,11],
+            "faces": {
+                "up": {
+                    "texture": "#printer"
+                },
+                "down": {
+                    "texture": "#printer"
+                },
+                "west": {
+                    "texture": "#printer"
+                },
+                "east": {
+                    "texture": "#printer"
+                },
+                "north": {
+                    "texture": "#printer"
+                },
+                "south": {
+                    "texture": "#printer"
+                }
+            }
+        }
+    ]
+}
