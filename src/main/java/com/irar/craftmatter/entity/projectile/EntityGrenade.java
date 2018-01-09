@@ -3,8 +3,11 @@ package com.irar.craftmatter.entity.projectile;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.irar.craftmatter.item.ItemGrenade;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,6 +18,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -26,6 +30,7 @@ public class EntityGrenade extends EntityThrowable
 	private Random r = new Random();
 	private ArrayList<BlockPos> toDestroy = new ArrayList<BlockPos>();
 	private ArrayList<BlockPos> hasBeenDestroyed = new ArrayList<BlockPos>();
+	private int totalAntimatter = 0;
 	
     public EntityGrenade(World worldIn)
     {
@@ -35,6 +40,7 @@ public class EntityGrenade extends EntityThrowable
     public EntityGrenade(World worldIn, EntityLivingBase throwerIn, int amount)
     {
         super(worldIn, throwerIn);
+        this.totalAntimatter  = amount;
         this.antimatterRemaining = amount;
     }
     public EntityGrenade(World worldIn, EntityLivingBase throwerIn)
@@ -163,6 +169,12 @@ public class EntityGrenade extends EntityThrowable
     	            this.world.setEntityState(this, (byte)3);
     	            this.setDead();
     	            System.out.println("Killed entity for lack of blocks");
+    	            EntityLivingBase thrower = this.getThrower();
+    	            if(thrower instanceof EntityPlayer) {
+    	            	EntityPlayer player = (EntityPlayer) thrower;
+    	            	player.sendMessage(new TextComponentString("Oops! Looks like a dud! Here's a complimentary replacement."));
+    	            	world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, ItemGrenade.getCraftMatterWithUnits(totalAntimatter)));
+    	            }
     			}
     		}else {
 	            this.world.setEntityState(this, (byte)3);

@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "normal": { "model": "craftmatter:blueprint_maker" }
+    }
+}

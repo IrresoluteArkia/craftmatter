@@ -7,5 +7,6 @@ public final class ModTileEntities {
 	public static void init(){
 		GameRegistry.registerTileEntity(TileBlueMaker.class, "blue_maker_tile_entity");
 		GameRegistry.registerTileEntity(TilePrinter.class, "anti_printer_tile_entity");
+		GameRegistry.registerTileEntity(TileCondenser.class, "anti_condenser_tile_entity");
 	}
 }

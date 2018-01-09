@@ -1,5 +1,6 @@
 package com.irar.craftmatter.handlers;
 
+import com.irar.craftmatter.block.AntiCondenser;
 import com.irar.craftmatter.block.AntiPrinter;
 import com.irar.craftmatter.block.BlueMaker;
 
@@ -20,11 +21,15 @@ public class BlockHandler {
 	public static ItemBlock ibBlueprintMaker;
 	public static Block printer;
 	public static ItemBlock ibPrinter;
+	public static Block condenser;
+	public static ItemBlock ibCondenser;
 	public static void init(){
 		blueprintMaker = new BlueMaker(Material.ROCK, "blueprint_maker", 7.0F, 7.0F, 0, "pickaxe");
 		ibBlueprintMaker = (ItemBlock) new ItemBlock(blueprintMaker);
 		printer = new AntiPrinter(Material.ROCK, "antimatter_printer", 7.0F, 7.0F, 0, "pickaxe");
 		ibPrinter = (ItemBlock) new ItemBlock(printer);
+		condenser = new AntiCondenser(Material.ROCK, "antimatter_condenser", 7.0F, 7.0F, 0, "pickaxe");
+		ibCondenser = (ItemBlock) new ItemBlock(condenser);
 	}
 	
 	public static void register(){
@@ -38,6 +43,11 @@ public class BlockHandler {
 		ForgeRegistries.BLOCKS.register(printer);
 		ForgeRegistries.ITEMS.register(ibPrinter);
 		
+		ibCondenser.setRegistryName(condenser.getRegistryName());
+		
+		ForgeRegistries.BLOCKS.register(condenser);
+		ForgeRegistries.ITEMS.register(ibCondenser);
+		
 	}
 	
 	public static void registerRenders(){
@@ -45,6 +55,8 @@ public class BlockHandler {
 		ItemHandler.registerRender(ibBlueprintMaker);
 		registerRender(printer);
 		ItemHandler.registerRender(ibPrinter);
+		registerRender(condenser);
+		ItemHandler.registerRender(ibCondenser);
 	}
 	
 	public static void registerRender(Block block){
