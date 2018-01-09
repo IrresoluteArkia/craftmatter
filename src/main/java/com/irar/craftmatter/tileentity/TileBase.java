@@ -41,6 +41,7 @@ public class TileBase extends TileEntity implements ITickable, IInventory{
 	protected boolean isValid = false;
 	public static ArrayList<TileBase> tiles = new ArrayList<TileBase>();
 	public boolean matterSet = false;
+	public boolean displayMatter = true;
     
     public TileBase(){
     	this.inventory = NonNullList.<ItemStack>withSize(1, ItemStack.EMPTY);

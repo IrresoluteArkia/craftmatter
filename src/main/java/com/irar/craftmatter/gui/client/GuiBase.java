@@ -67,9 +67,11 @@ public class GuiBase extends GuiContainer {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
         this.fontRenderer.drawString(this.te.getDisplayName().getUnformattedText(), 8, 4, 0);
-        this.fontRenderer.drawString("Units Of " + matter() + ": " + this.te.getAmountMatter(), 8, 34, 0);
-        if(this.te.isValidRecipe()) {
-        	this.fontRenderer.drawString(matter() + " Needed: " + this.te.getMatterNeeded(), 8, 44, 0);
+        if(this.te.displayMatter) {
+	        this.fontRenderer.drawString("Units Of " + matter() + ": " + this.te.getAmountMatter(), 8, 34, 0);
+	        if(this.te.isValidRecipe()) {
+	        	this.fontRenderer.drawString(matter() + " Needed: " + this.te.getMatterNeeded(), 8, 44, 0);
+	        }
         }
         this.fontRenderer.drawString(this.playerInv.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 0);
     }

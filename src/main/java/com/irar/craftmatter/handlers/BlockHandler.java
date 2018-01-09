@@ -1,6 +1,7 @@
 package com.irar.craftmatter.handlers;
 
 import com.irar.craftmatter.block.AntiCondenser;
+import com.irar.craftmatter.block.AntiInverter;
 import com.irar.craftmatter.block.AntiPrinter;
 import com.irar.craftmatter.block.BlueMaker;
 
@@ -23,6 +24,8 @@ public class BlockHandler {
 	public static ItemBlock ibPrinter;
 	public static Block condenser;
 	public static ItemBlock ibCondenser;
+	public static Block inverter;
+	public static ItemBlock ibInverter;
 	public static void init(){
 		blueprintMaker = new BlueMaker(Material.ROCK, "blueprint_maker", 7.0F, 7.0F, 0, "pickaxe");
 		ibBlueprintMaker = (ItemBlock) new ItemBlock(blueprintMaker);
@@ -30,6 +33,8 @@ public class BlockHandler {
 		ibPrinter = (ItemBlock) new ItemBlock(printer);
 		condenser = new AntiCondenser(Material.ROCK, "antimatter_condenser", 7.0F, 7.0F, 0, "pickaxe");
 		ibCondenser = (ItemBlock) new ItemBlock(condenser);
+		inverter = new AntiInverter(Material.ROCK, "antimatter_inverter", 7.0F, 7.0F, 0, "pickaxe");
+		ibInverter = (ItemBlock) new ItemBlock(inverter);
 	}
 	
 	public static void register(){
@@ -48,6 +53,11 @@ public class BlockHandler {
 		ForgeRegistries.BLOCKS.register(condenser);
 		ForgeRegistries.ITEMS.register(ibCondenser);
 		
+		ibInverter.setRegistryName(inverter.getRegistryName());
+		
+		ForgeRegistries.BLOCKS.register(inverter);
+		ForgeRegistries.ITEMS.register(ibInverter);
+		
 	}
 	
 	public static void registerRenders(){
@@ -57,6 +67,8 @@ public class BlockHandler {
 		ItemHandler.registerRender(ibPrinter);
 		registerRender(condenser);
 		ItemHandler.registerRender(ibCondenser);
+		registerRender(inverter);
+		ItemHandler.registerRender(ibInverter);
 	}
 	
 	public static void registerRender(Block block){

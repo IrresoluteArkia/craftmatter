@@ -8,5 +8,6 @@ public final class ModTileEntities {
 		GameRegistry.registerTileEntity(TileBlueMaker.class, "blue_maker_tile_entity");
 		GameRegistry.registerTileEntity(TilePrinter.class, "anti_printer_tile_entity");
 		GameRegistry.registerTileEntity(TileCondenser.class, "anti_condenser_tile_entity");
+		GameRegistry.registerTileEntity(TileInverter.class, "anti_inverter_tile_entity");
 	}
 }
