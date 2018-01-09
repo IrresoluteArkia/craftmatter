@@ -38,27 +38,6 @@ public class TilePrinter extends TileBase{
 	@Override
 	public void update() {
 		super.update();
-/*		ItemStack result = inventory.get(1);
-		ItemStack matter = inventory.get(0);
-		if(!matter.isEmpty() && matter.getItem() instanceof ItemCraft) {
-			this.amountMatter += matter.getCount();
-			if(ItemCraft.getAmount(matter) == 1) {
-				inventory.set(1, ItemStack.EMPTY);
-			}else {
-				ItemCraft.setAmount(matter, ItemCraft.getAmount(matter) - 1);
-			}
-			this.markDirty();
-		}
-		if((result.isEmpty() || result.getItem() instanceof ItemAntiCraft) && isValid && matterNeeded < amountMatter) {
-			amountMatter -= matterNeeded;
-			if(result.getItem() instanceof ItemAntiCraft) {
-				inventory.set(1, ItemAntiCraft.getCraftAntiMatterWithUnits(ItemAntiCraft.getAmount(result) + 1));
-			}else {
-				inventory.set(1, ItemAntiCraft.getCraftAntiMatterWithUnits(1));
-			}
-			this.markDirty();
-		}*///accidentally wrote code for something else here... oops
-		//   will definitely move it later
 		ItemStack resultItem = ItemStack.EMPTY;
 		ItemStack toMake = inventory.get(1);
 		if(!toMake.isEmpty() && toMake.getItem() instanceof ItemBlueprint) {

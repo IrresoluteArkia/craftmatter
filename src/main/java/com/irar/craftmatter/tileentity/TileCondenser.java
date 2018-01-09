@@ -45,7 +45,7 @@ public class TileCondenser extends TileBase{
 		if(!matter.isEmpty() && matter.getItem() instanceof ItemCraft) {
 			this.amountMatter += matter.getCount();
 			if(ItemCraft.getAmount(matter) == 1) {
-				inventory.set(2, ItemStack.EMPTY);
+				inventory.set(1, ItemStack.EMPTY);
 			}else {
 				ItemCraft.setAmount(matter, ItemCraft.getAmount(matter) - 1);
 			}
