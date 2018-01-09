@@ -57,6 +57,7 @@ public class AntiPrinter extends Block implements ITileEntityProvider{
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState blockstate) {
 		TilePrinter te = (TilePrinter) world.getTileEntity(pos);
+		te.writeMatterToItemStack();
 	    InventoryHelper.dropInventoryItems(world, pos, te);
 	    super.breakBlock(world, pos, blockstate);
 	}

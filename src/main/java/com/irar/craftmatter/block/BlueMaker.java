@@ -56,6 +56,7 @@ public class BlueMaker extends Block implements ITileEntityProvider{
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState blockstate) {
 		TileBlueMaker te = (TileBlueMaker) world.getTileEntity(pos);
+		te.writeMatterToItemStack();
 	    InventoryHelper.dropInventoryItems(world, pos, te);
 	    super.breakBlock(world, pos, blockstate);
 	}
