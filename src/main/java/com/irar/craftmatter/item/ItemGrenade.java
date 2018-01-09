@@ -8,6 +8,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.irar.craftmatter.Ref;
+import com.irar.craftmatter.config.ConfigBooleans;
 import com.irar.craftmatter.entity.projectile.EntityGrenade;
 
 import net.minecraft.client.util.ITooltipFlag;
@@ -33,24 +34,27 @@ public class ItemGrenade extends Item{
     }
 
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn){
-        ItemStack itemstack = playerIn.getHeldItem(handIn);
-        
-        int amount = ItemGrenade.getAmount(itemstack);
-
-        if (!playerIn.capabilities.isCreativeMode){
-            itemstack.shrink(1);
-        }
-
-        worldIn.playSound((EntityPlayer)null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
-
-        if (!worldIn.isRemote){
-            EntityGrenade entitygrenade = new EntityGrenade(worldIn, playerIn, amount);
-            entitygrenade.setHeadingFromThrower(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 1.0F);
-            worldIn.spawnEntity(entitygrenade);
-        }
-
-        playerIn.addStat(StatList.getObjectUseStats(this));
-        return new ActionResult(EnumActionResult.SUCCESS, itemstack);
+    	if(ConfigBooleans.ANTI_GRENADE_ENABLED.currentValue) {
+	        ItemStack itemstack = playerIn.getHeldItem(handIn);
+	        
+	        int amount = ItemGrenade.getAmount(itemstack);
+	
+	        if (!playerIn.capabilities.isCreativeMode){
+	            itemstack.shrink(1);
+	        }
+	
+	        worldIn.playSound((EntityPlayer)null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+	
+	        if (!worldIn.isRemote){
+	            EntityGrenade entitygrenade = new EntityGrenade(worldIn, playerIn, amount);
+	            entitygrenade.setHeadingFromThrower(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 1.0F);
+	            worldIn.spawnEntity(entitygrenade);
+	        }
+	
+	        playerIn.addStat(StatList.getObjectUseStats(this));
+	        return new ActionResult(EnumActionResult.SUCCESS, itemstack);
+    	}
+    	return super.onItemRightClick(worldIn, playerIn, handIn);
     }
     
 	public static ItemStack getCraftMatterWithUnits(int amount){

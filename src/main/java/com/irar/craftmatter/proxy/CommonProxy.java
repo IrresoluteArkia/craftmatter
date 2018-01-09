@@ -8,6 +8,7 @@ import com.irar.craftmatter.CraftMatter;
 import com.irar.craftmatter.crafting.Mapper;
 import com.irar.craftmatter.entity.projectile.EntityGrenade;
 import com.irar.craftmatter.client.renderer.factory.FactoryGrenade;
+import com.irar.craftmatter.config.ConfigHandler;
 import com.irar.craftmatter.handlers.BlockHandler;
 import com.irar.craftmatter.handlers.CraftingHandler;
 import com.irar.craftmatter.handlers.ItemHandler;
@@ -62,6 +63,7 @@ public class CommonProxy implements IProxy{
 
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
+		new ConfigHandler(event.getSuggestedConfigurationFile());
         final MainEventHandler handler = new MainEventHandler();
         MinecraftForge.EVENT_BUS.register((Object)handler);
 		ItemHandler.init();

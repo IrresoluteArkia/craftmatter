@@ -3,6 +3,7 @@ package com.irar.craftmatter.crafting;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
+import com.irar.craftmatter.config.ConfigInts;
 import com.irar.craftmatter.handlers.ItemHandler;
 import com.irar.craftmatter.item.ItemAntiCraft;
 import com.irar.craftmatter.item.ItemCraft;
@@ -56,7 +57,7 @@ public class GrenadeRecipe implements IRecipe{
 					if(stack.getItem().equals(Items.GUNPOWDER)) {
 						hasPowder = true;
 					}
-					if(stack.getItem() instanceof ItemAntiCraft) {
+					if(stack.getItem() instanceof ItemAntiCraft && ItemAntiCraft.getAmount(stack) <= ConfigInts.ANTI_GRENADE_MAX_ANTIMATTER.currentValue) {
 						hasAnti = true;
 					}
 					
