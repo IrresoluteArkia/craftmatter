@@ -29,6 +29,15 @@ public class UnitMapping {
 		values.add(value);
 	}
 	
+	public static void addMapping(ItemStack stack, int value) {
+		ItemStack itemstack = stack.copy();
+		itemstack.setCount(1);
+		String toString = itemstack.toString();
+		
+		registryNames.add(toString);
+		values.add(value);
+	}
+
 	public static void addMapping(String ore, int value) {
 		NonNullList<ItemStack> ores = OreDictionary.getOres(ore);
 		ArrayList<String> toStrings = new ArrayList<String>();
@@ -106,6 +115,11 @@ public class UnitMapping {
 			}
 		}
 		return false;
+	}
+
+	public static void clear() {
+		registryNames.clear();
+		values.clear();
 	}
 
 	

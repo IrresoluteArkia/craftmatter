@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -23,6 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -37,6 +39,7 @@ public class ItemAntiItem extends Item implements ItemMeshDefinition{
 	private ModelResourceLocation locb = null;
 	
 	public ItemAntiItem(String name){
+		this.setHasSubtypes(true);
 		setUnlocalizedName(name);
 		setRegistryName(name);
 		setCreativeTab(CreativeTabsHandler.CM);
@@ -52,11 +55,13 @@ public class ItemAntiItem extends Item implements ItemMeshDefinition{
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn){
 		
-		if(stack.hasTagCompound() && stack.getTagCompound().hasKey(STACK_KEY)){
-			tooltip.add("Put In The Antimatter Inverter");
-		}else{
-			tooltip.add("Invalid Itemstack: please get this item through proper methods!");
-		}
+		if(stack.getMetadata() == 0) {
+			if(stack.hasTagCompound() && stack.getTagCompound().hasKey(STACK_KEY)){
+				tooltip.add("Put In The Antimatter Inverter");
+			}else{
+				tooltip.add("Invalid Itemstack: please get this item through proper methods!");
+			}
+		}else if(stack.getMetadata() == 1) {}
 		
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 	}
@@ -71,37 +76,57 @@ public class ItemAntiItem extends Item implements ItemMeshDefinition{
 	
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		if(stack.hasTagCompound() && stack.getTagCompound().hasKey(STACK_KEY)) {
-			NBTTagCompound stackData = (NBTTagCompound) stack.getTagCompound().getTag(STACK_KEY);
-			ItemStack itemstack = new ItemStack(stackData);
-			return "Antimatter " + itemstack.getItem().getItemStackDisplayName(itemstack);
+		if(stack.getMetadata() == 0) {
+			if(stack.hasTagCompound() && stack.getTagCompound().hasKey(STACK_KEY)) {
+				NBTTagCompound stackData = (NBTTagCompound) stack.getTagCompound().getTag(STACK_KEY);
+				ItemStack itemstack = new ItemStack(stackData);
+				return "Antimatter " + itemstack.getItem().getItemStackDisplayName(itemstack);
+			}
+			return "Antimatter Item";
+		}else if(stack.getMetadata() == 1){
+			return "Anything";
 		}
 		return "Antimatter Item";
 	}
 	
 	@Override
 	public ModelResourceLocation getModelLocation(ItemStack stack) {
-		if(stack.hasTagCompound() && stack.getTagCompound().hasKey(STACK_KEY)) {
-			NBTTagCompound stackData = (NBTTagCompound) stack.getTagCompound().getTag(STACK_KEY);
-			ItemStack itemstack = new ItemStack(stackData);
-			IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(itemstack);
-			CommonProxy.modelRegistry.getKeys().forEach(new Consumer<ModelResourceLocation>() {
-				@Override
-				public void accept(ModelResourceLocation arg0) {
-					if(CommonProxy.modelRegistry.getObject(arg0).equals(model)) {
-						locb = arg0;
+		if(stack.getMetadata() == 0) {
+			if(stack.hasTagCompound() && stack.getTagCompound().hasKey(STACK_KEY)) {
+				NBTTagCompound stackData = (NBTTagCompound) stack.getTagCompound().getTag(STACK_KEY);
+				ItemStack itemstack = new ItemStack(stackData);
+				IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(itemstack);
+				CommonProxy.modelRegistry.getKeys().forEach(new Consumer<ModelResourceLocation>() {
+					@Override
+					public void accept(ModelResourceLocation arg0) {
+						if(CommonProxy.modelRegistry.getObject(arg0).equals(model)) {
+							locb = arg0;
+						}
 					}
+				});
+				if(locb == null) {
+					locb = new ModelResourceLocation(itemstack.getItem().getRegistryName(), "inventory");
 				}
-			});
-			if(locb == null) {
-//				System.out.println("Couldn't find texture! Trying to find a substitute!");
-				locb = new ModelResourceLocation(itemstack.getItem().getRegistryName(), "inventory");
+				System.out.println(locb.getResourceDomain() + ":" + locb.getResourcePath() + ":" + locb.getVariant());
+				return locb;
+			}else {
+				return new ModelResourceLocation(this.getRegistryName(), "inventory");
 			}
-//			System.out.println(locb.toString());
-			return locb;
-		}else {
-			return new ModelResourceLocation(this.getRegistryName(), "inventory");
+		}else if(stack.getMetadata() == 1){
+			return new ModelResourceLocation(new ResourceLocation("craftmatter", "asterisk"), "inventory");
 		}
+		return new ModelResourceLocation(this.getRegistryName(), "inventory");
 	}
+	
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
+    {
+        if (this.isInCreativeTab(tab))
+        {
+            for (int i = 0; i < 2; ++i)
+            {
+                items.add(new ItemStack(this, 1, i));
+            }
+        }
+    }
 
 }

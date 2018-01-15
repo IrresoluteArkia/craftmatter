@@ -1,13 +1,36 @@
 package com.irar.craftmatter.crafting;
 
-import com.irar.craftmatter.handlers.BlockHandler;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.function.BiConsumer;
 
+import com.irar.craftmatter.handlers.BlockHandler;
+import com.irar.craftmatter.proxy.CommonProxy;
+
+import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.registries.IForgeRegistry;
 
 public class Mapper {
 
+	private static List<List<Ingredient>> recipeMapIn = new ArrayList<List<Ingredient>>();
+	private static List<ItemStack> recipeMapOut = new ArrayList<ItemStack>();
+	private static HashMap<ItemStack, Integer> permanentMappings = new HashMap<ItemStack, Integer>();
+	
 	public static void init() {
+		UnitMapping.clear();
 		UnitMapping.addMapping(Blocks.LOG, 8);
 		UnitMapping.addMapping(Blocks.LOG2, 8);
 		UnitMapping.addMapping(Blocks.PLANKS, 2);
@@ -196,7 +219,7 @@ public class Mapper {
 		UnitMapping.addMapping(Blocks.PURPUR_BLOCK, 32);
 		UnitMapping.addMapping(Blocks.PURPUR_PILLAR, 32);
 		UnitMapping.addMapping(Blocks.PURPUR_STAIRS, 48);
-		UnitMapping.addMapping(Blocks.PISTON, 35);
+//		UnitMapping.addMapping(Blocks.PISTON, 35);
 		UnitMapping.addMapping(Blocks.PURPUR_SLAB, 16);
 		UnitMapping.addMapping(Blocks.PURPUR_DOUBLE_SLAB, 32);
 		UnitMapping.addMapping(Blocks.QUARTZ_BLOCK, 96);
@@ -330,13 +353,13 @@ public class Mapper {
 		UnitMapping.addMapping(Items.MAP, 89);
 		UnitMapping.addMapping(Items.GLASS_BOTTLE, 2);
 		UnitMapping.addMapping(Items.GOLD_NUGGET, 14);
-		UnitMapping.addMapping(Items.GOLDEN_APPLE, 1034);
+//		UnitMapping.addMapping(Items.GOLDEN_APPLE, 1034);
 		UnitMapping.addMapping(Items.GOLDEN_AXE, 386);
-		UnitMapping.addMapping(Items.GOLDEN_CARROT, 122);
+//		UnitMapping.addMapping(Items.GOLDEN_CARROT, 122);
 		UnitMapping.addMapping(Items.GOLDEN_HOE, 258);
 		UnitMapping.addMapping(Items.GOLDEN_HORSE_ARMOR, 768);
 		UnitMapping.addMapping(Items.GOLDEN_PICKAXE, 386);
-		UnitMapping.addMapping(Items.GOLDEN_SHOVEL, 130);
+//		UnitMapping.addMapping(Items.GOLDEN_SHOVEL, 130);
 		UnitMapping.addMapping(Items.GOLDEN_SWORD, 257);
 		UnitMapping.addMapping(Items.GOLDEN_BOOTS, 256);
 		UnitMapping.addMapping(Items.GOLDEN_CHESTPLATE, 1024);
@@ -422,6 +445,161 @@ public class Mapper {
 		UnitMapping.addMapping(BlockHandler.condenser, 1000);
 		UnitMapping.addMapping(BlockHandler.inverter, 5000);
 		UnitMapping.addMapping(BlockHandler.printer, 1000);
+		
+		permanentMappings.forEach(new BiConsumer<ItemStack, Integer>(){
+			@Override
+			public void accept(ItemStack stack, Integer value) {
+				UnitMapping.addMapping(stack, value);
+			}
+		});
+		
+		deriveMappings(CommonProxy.recipeRegistry);
+	}
+
+	private static void deriveMappings(IForgeRegistry<IRecipe> recipes) {
+		IForgeRegistry<Block> blocks = ForgeRegistries.BLOCKS;
+		IForgeRegistry<Item> items = ForgeRegistries.ITEMS;
+		populateRecipeMap(recipes);
+		for(Block block : blocks) {
+			deriveMapping(block, recipes);
+		}
+		for(Item item : items) {
+			deriveMapping(item, recipes);
+		}
+	}
+
+	private static void populateRecipeMap(IForgeRegistry<IRecipe> recipes) {
+		for(IRecipe irecipe : recipes) {
+			if(irecipe instanceof ShapedRecipes) {
+				ShapedRecipes recipe = (ShapedRecipes) irecipe;
+				ItemStack result = recipe.getRecipeOutput();
+				List<Ingredient> ingredients = recipe.getIngredients();
+				recipeMapIn.add(ingredients);
+				recipeMapOut.add(result);
+			}
+			if(irecipe instanceof ShapelessRecipes) {
+				ShapelessRecipes recipe = (ShapelessRecipes) irecipe;
+				ItemStack result = recipe.getRecipeOutput();
+				List<Ingredient> ingredients = recipe.getIngredients();
+				recipeMapIn.add(ingredients);
+				recipeMapOut.add(result);
+			}
+		}
+	}
+
+	private static void deriveMapping(Item item, IForgeRegistry<IRecipe> recipes) {
+		if(item.getHasSubtypes()) {
+			NonNullList<ItemStack> items = NonNullList.<ItemStack>create();
+			CreativeTabs[] tabs = CreativeTabs.CREATIVE_TAB_ARRAY;
+			for(CreativeTabs tab : tabs) {
+				item.getSubItems(tab, items);
+			}
+			for(ItemStack stack : items) {
+				deriveMapping(stack, recipes);
+			}
+		}
+		deriveMapping(new ItemStack(item, 1, 0), recipes);
+	}
+
+	private static void deriveMapping(ItemStack stack, IForgeRegistry<IRecipe> recipes) {
+		deriveMapping(stack);
+	}
+
+	private static void deriveMapping(ItemStack stack) {
+		if(!stack.isEmpty() && !UnitMapping.hasValueFor(stack)) {
+			int value = 0;
+			value = getValueFromOreDict(stack);
+			if(value != 0) {
+				UnitMapping.addMapping(stack, value);
+				System.out.println("Derived value for " + stack.getDisplayName() + ": " + value);
+				return;
+			}
+			
+			value = getValueAsRecipeOutput(stack);
+			
+			if(value != 0) {
+				UnitMapping.addMapping(stack, value);
+				System.out.println("Derived value for " + stack.getDisplayName() + ": " + value);
+				return;
+			}
+			
+		}
+	}
+
+	private static int getValueAsRecipeOutput(ItemStack stack) {
+		List<List<Ingredient>> ingredientsList = getIngredientsListFor(stack);
+		for(List<Ingredient> ingredients : ingredientsList) {
+			int totalValue = 0;
+			for(Ingredient ingredient : ingredients) {
+				ItemStack[] itemstacks = ingredient.getMatchingStacks();
+				boolean gotValue = false;
+				int value = 0;
+				for(ItemStack itemstack : itemstacks) {
+					if(!gotValue) {
+						if(UnitMapping.hasValueFor(itemstack)) {
+							value = UnitMapping.getValueFor(itemstack);
+							gotValue = true;
+						}else {
+							if(!itemstack.isItemEqual(stack)) {
+								deriveMapping(itemstack);
+							}
+						}
+						if(UnitMapping.hasValueFor(itemstack)) {
+							value = UnitMapping.getValueFor(itemstack);
+							gotValue = true;
+						}
+					}
+				}
+				if(gotValue) {
+					totalValue += value;
+				}else {
+					totalValue = 0;
+					break;
+				}
+			}
+			if(totalValue != 0) {
+				return totalValue / (recipeMapOut.get(recipeMapIn.indexOf(ingredients)).getCount());
+			}
+		}
+		return 0;
+	}
+
+	private static List<List<Ingredient>> getIngredientsListFor(ItemStack stack) {
+		List<List<Ingredient>> ingredientsList = new ArrayList<List<Ingredient>>();
+		for(int i = 0; i < recipeMapOut.size(); i++) {
+			if(recipeMapOut.get(i).isItemEqual(stack)) {
+				ingredientsList.add(recipeMapIn.get(i));
+			}
+		}
+		return ingredientsList;
+	}
+
+	private static int getValueFromOreDict(ItemStack stack) {
+		if(OreDictionary.getOreIDs(stack).length > 0) {
+			int[] ids = OreDictionary.getOreIDs(stack);
+			ArrayList<String> names = new ArrayList<String>();
+			for(int id : ids) {
+				names.add(OreDictionary.getOreName(id));
+			}
+			for(String name : names) {
+				List<ItemStack> stacks = OreDictionary.getOres(name);
+				for(ItemStack testStack : stacks) {
+					if(UnitMapping.hasValueFor(testStack)) {
+						return UnitMapping.getValueFor(stack);
+					}
+				}
+			}
+		}
+		return 0;
+	}
+
+	private static void deriveMapping(Block block, IForgeRegistry<IRecipe> recipes) {
+		Item item = (new ItemStack(block)).getItem();
+		deriveMapping(item, recipes);
+	}
+
+	public static void addPermanentMapping(ItemStack stack, int value) {
+		permanentMappings.put(stack, value);
 	}
 	
 }

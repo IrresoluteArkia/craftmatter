@@ -15,6 +15,7 @@ import com.irar.craftmatter.handlers.BlockHandler;
 import com.irar.craftmatter.handlers.CraftingHandler;
 import com.irar.craftmatter.handlers.ItemHandler;
 import com.irar.craftmatter.item.IDontShowMatter;
+import com.irar.craftmatter.item.ItemAntiItem;
 import com.irar.craftmatter.network.CraftMessage;
 import com.irar.craftmatter.network.CraftMessageHandler;
 import com.irar.craftmatter.network.CraftPacketHandler;
@@ -56,6 +57,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -71,6 +73,7 @@ public class CommonProxy implements IProxy{
 //	public static SaveDataHandler saveData;
 	public static IForgeRegistry<IRecipe> recipeRegistry;
 	public static IRegistry<ModelResourceLocation, IBakedModel> modelRegistry;
+	public static boolean postInitDone = false;
 
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
@@ -94,14 +97,18 @@ public class CommonProxy implements IProxy{
 
 	@Override
 	public void postInit(FMLPostInitializationEvent event) {
-		Mapper.init();
 		CraftingHandler.init();
+		Mapper.init();
+		postInitDone  = true;
 	}
 	
 	public static class MainEventHandler{
 		@SubscribeEvent
 		public void Register(RegistryEvent.Register<IRecipe> event){
 			recipeRegistry = event.getRegistry();
+			if(postInitDone) {
+				Mapper.init();
+			}
 		}
 
 		@SubscribeEvent
@@ -114,13 +121,13 @@ public class CommonProxy implements IProxy{
 		public void Tooltip(ItemTooltipEvent event){
 			if(ConfigBooleans.SHOW_TOOLTIP.currentValue) {
 				ItemStack stack = event.getItemStack();
-				if(!(stack.getItem() instanceof IDontShowMatter)) {
+				if(!(stack.getItem() instanceof IDontShowMatter) && !(stack.getItem() instanceof ItemAntiItem && stack.getMetadata() != 0)) {
 					int amount = UnitMapping.getValueFor(stack);
 					event.getToolTip().add("Worth " + Math.abs(amount) + " " + getPlural("Unit", Math.abs(amount)) + " Of "  + (amount >= 0 ? "Matter" : "Antimatter"));
 				}
 			}
 		}
-
+		
 		private String getPlural(String string, int amount) {
 			if(amount != 1) {
 				return string + "s";
