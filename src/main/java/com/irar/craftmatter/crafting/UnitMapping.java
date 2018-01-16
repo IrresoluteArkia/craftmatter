@@ -8,6 +8,7 @@ import com.irar.craftmatter.item.ItemCraft;
 import com.irar.craftmatter.item.ItemGrenade;
 
 import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -16,45 +17,69 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class UnitMapping {
 
-	private static ArrayList<String> registryNames = new ArrayList<String>();
+	private static ArrayList<ItemStack> registryNames = new ArrayList<ItemStack>();
 	private static ArrayList<Integer> values = new ArrayList<Integer>();
 	
 	public static void addMapping(Block block, int value) {
-		registryNames.add(new ItemStack(block).toString());
+		registryNames.add(new ItemStack(block));
 		values.add(value);
 	}
 	
 	public static void addMapping(Item item, int value) {
-		registryNames.add(new ItemStack(item).toString());
+		registryNames.add(new ItemStack(item));
 		values.add(value);
 	}
 	
 	public static void addMapping(ItemStack stack, int value) {
-		ItemStack itemstack = stack.copy();
-		itemstack.setCount(1);
-		String toString = itemstack.toString();
-		
-		registryNames.add(toString);
-		values.add(value);
+		if(!stack.isEmpty()) {
+			ItemStack itemstack = stack.copy();
+			itemstack.setCount(1);
+			
+			registryNames.add(itemstack);
+			values.add(value);
+		}
+	}
+	
+	public static void addAllMappings(Block block, int value) {
+		addAllMappings(new ItemStack(block), value);
+	}
+	
+	public static void addAllMappings(Item item, int value) {
+		addAllMappings(new ItemStack(item), value);
+	}
+	
+	public static void addAllMappings(ItemStack stack, int value) {
+		if(stack.getItem().getHasSubtypes()) {
+			NonNullList<ItemStack> items = NonNullList.<ItemStack>create();
+			CreativeTabs[] tabs = CreativeTabs.CREATIVE_TAB_ARRAY;
+			for(CreativeTabs tab : tabs) {
+				stack.getItem().getSubItems(tab, items);
+			}
+			for(ItemStack itemstack : items) {
+				addMapping(itemstack, value);
+			}
+		}else {
+			addMapping(stack, value);
+		}
 	}
 
 	public static void addMapping(String ore, int value) {
 		NonNullList<ItemStack> ores = OreDictionary.getOres(ore);
-		ArrayList<String> toStrings = new ArrayList<String>();
+		ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();
 		for(ItemStack stack : ores) {
 			ItemStack itemstack = stack.copy();
 			itemstack.setCount(1);
-			toStrings.add(itemstack.toString());
+			stacks.add(itemstack);
 		}
 		
-		registryNames.addAll(toStrings);
+		registryNames.addAll(stacks);
 		values.add(value);
 	}
 	
 	public static int getValueFor(Block block) {
 		int value = 1;
 		for(int i = 0; i < registryNames.size(); i++) {
-			if(registryNames.get(i).equals(new ItemStack(block).toString())) {
+			if(registryNames.get(i).isItemEqual(new ItemStack(block))) {
 				return values.get(i);
 			}
 		}
@@ -65,7 +90,7 @@ public class UnitMapping {
 	public static int getValueFor(Item item) {
 		int value = 1;
 		for(int i = 0; i < registryNames.size(); i++) {
-			if(registryNames.get(i).equals(new ItemStack(item).toString())) {
+			if(registryNames.get(i).isItemEqual(new ItemStack(item))) {
 				return values.get(i);
 			}
 		}
@@ -78,7 +103,6 @@ public class UnitMapping {
 		if(stack.isEmpty()) {
 			return 0;
 		}
-		ItemStack itemstack = new ItemStack(stack.getItem());
 		if(stack.getItem() instanceof ItemCraft) {
 			value = ItemCraft.getAmount(stack);
 		}else if(stack.getItem() instanceof ItemAntiCraft) {
@@ -89,8 +113,15 @@ public class UnitMapping {
 			value = - ItemGrenade.getAmount(stack);
 		}else{
 			for(int i = 0; i < registryNames.size(); i++) {
-				if(registryNames.get(i).equals(itemstack.toString())) {
-					return values.get(i);
+				boolean isWildcard = stack.getMetadata() == OreDictionary.WILDCARD_VALUE || registryNames.get(i).getMetadata() == OreDictionary.WILDCARD_VALUE;
+				if(isWildcard) {
+					if(registryNames.get(i).getItem().equals(stack.getItem())) {
+						return values.get(i);
+					}
+				}else {
+					if(registryNames.get(i).isItemEqual(stack)) {
+						return values.get(i);
+					}
 				}
 			}
 		}
@@ -102,15 +133,21 @@ public class UnitMapping {
 		if(stack.isEmpty()) {
 			return false;
 		}
-		ItemStack itemstack = new ItemStack(stack.getItem());
-		if(itemstack.getItem() instanceof ItemCraft) {
+		if(stack.getItem() instanceof ItemCraft) {
 			return false;
-		}else if(itemstack.getItem() instanceof ItemAntiCraft) {
+		}else if(stack.getItem() instanceof ItemAntiCraft) {
 			return false;
 		}else {
 			for(int i = 0; i < registryNames.size(); i++) {
-				if(registryNames.get(i).equals(itemstack.toString())) {
-					return true;
+				boolean isWildcard = stack.getMetadata() == OreDictionary.WILDCARD_VALUE || registryNames.get(i).getMetadata() == OreDictionary.WILDCARD_VALUE;
+				if(isWildcard) {
+					if(registryNames.get(i).getItem().equals(stack.getItem())) {
+						return true;
+					}
+				}else {
+					if(registryNames.get(i).isItemEqual(stack)) {
+						return true;
+					}
 				}
 			}
 		}

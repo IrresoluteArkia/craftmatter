@@ -107,7 +107,7 @@ public class ItemAntiItem extends Item implements ItemMeshDefinition{
 				if(locb == null) {
 					locb = new ModelResourceLocation(itemstack.getItem().getRegistryName(), "inventory");
 				}
-				System.out.println(locb.getResourceDomain() + ":" + locb.getResourcePath() + ":" + locb.getVariant());
+//				System.out.println(locb.getResourceDomain() + ":" + locb.getResourcePath() + ":" + locb.getVariant());
 				return locb;
 			}else {
 				return new ModelResourceLocation(this.getRegistryName(), "inventory");
