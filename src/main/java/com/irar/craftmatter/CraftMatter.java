@@ -1,5 +1,7 @@
 package com.irar.craftmatter;
 
+import java.util.ArrayList;
+
 import com.google.common.collect.ImmutableList;
 import com.irar.craftmatter.crafting.Mapper;
 import com.irar.craftmatter.entity.projectile.EntityGrenade;
@@ -49,25 +51,67 @@ public class CraftMatter {
 		Mapper.init();
     }
     
+    private ArrayList<IMCMessage> processedMessages = new ArrayList<IMCMessage>();
     @EventHandler
     public void comms(IMCEvent event) {
     	ImmutableList<IMCMessage> messages = event.getMessages();
-    	ItemStack stack = ItemStack.EMPTY;
-    	int value = 0;
+    	IMCMessage stack = null;
+    	IMCMessage value = null;
+    	boolean hasStack = false;
+    	boolean hasValue = false;
     	for(IMCMessage imessage : messages) {
-    		if(imessage.isItemStackMessage()) {
-    			stack = imessage.getItemStackValue();
+    		if(!processedMessages.contains(imessage) && imessage.key.equalsIgnoreCase("MATTER_VALUE_REGISTRATION")) {
+	    		if(imessage.isItemStackMessage()) {
+	    			if(!hasStack) {
+	    				if(hasValue) {
+	    					if(stack.getSender().equals(imessage.getSender())) {
+	    	    				stack = imessage;
+	    	    				hasStack = true;
+	    					}
+	    				}else {
+		    				stack = imessage;
+		    				hasStack = true;
+	    				}
+	    			}
+	    		}
+	    		if(imessage.isStringMessage()) {
+	    			if(!hasValue) {
+		    			try {
+		    				Integer.parseInt(imessage.getStringValue());
+		    				if(hasStack) {
+		    					if(stack.getSender().equals(imessage.getSender())) {
+				    				value = imessage;
+				    				hasValue = true;
+		    					}
+		    				}else {
+			    				value = imessage;
+			    				hasValue = true;
+		    				}
+		    			}catch(NumberFormatException e) {
+		    				hasValue = false; // eating the error! yum, yum!
+		    			}
+	    			}
+	    		}
     		}
-    		if(imessage.isStringMessage()) {
-    			try {
-    				value = Integer.parseInt(imessage.getStringValue());
-    			}catch(NumberFormatException e) {
-    				; // eating the error! yum, yum!
-    			}
-    		}
-    	}
-    	if(!stack.isEmpty() && value != 0) {
-    		Mapper.addPermanentMapping(stack, value);
+        	if(hasStack && hasValue) {
+        		if(stack.getSender().equals(value.getSender())) {
+	        		processedMessages.add(stack);
+	        		processedMessages.add(value);
+	    	    	if(!stack.getItemStackValue().isEmpty() && Integer.parseInt(value.getStringValue()) != 0) {
+	    	    		Mapper.addPermanentMapping(stack.getItemStackValue(), Integer.parseInt(value.getStringValue()));
+	    	    		System.out.println("Registered mapping from mod: " + stack.getSender());
+	    	    	}
+        			stack = null;
+        			value = null;
+        			hasStack = false;
+        			hasValue = false;
+        		}else {
+        			stack = null;
+        			value = null;
+        			hasStack = false;
+        			hasValue = false;
+        		}
+        	}
     	}
     }
 }

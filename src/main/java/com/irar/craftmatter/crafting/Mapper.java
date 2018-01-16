@@ -280,7 +280,7 @@ public class Mapper {
 				value = getValueFromOreDict(stack);
 				if(value != 0) {
 					UnitMapping.addMapping(stack, value);
-					System.out.println("Derived value for " + stack.getDisplayName() + ": " + value);
+//					System.out.println("Derived value for " + stack.getDisplayName() + ": " + value);
 					return;
 				}
 				
@@ -288,7 +288,7 @@ public class Mapper {
 				
 				if(value != 0) {
 					UnitMapping.addMapping(stack, value);
-					System.out.println("Derived value for " + stack.getDisplayName() + ": " + value);
+//					System.out.println("Derived value for " + stack.getDisplayName() + ": " + value);
 					return;
 				}
 				
@@ -296,7 +296,7 @@ public class Mapper {
 				
 				if(value != 0) {
 					UnitMapping.addMapping(stack, value);
-					System.out.println("Derived value for " + stack.getDisplayName() + ": " + value);
+//					System.out.println("Derived value for " + stack.getDisplayName() + ": " + value);
 					return;
 				}
 				
