@@ -31,16 +31,21 @@ public class Mapper {
 
 	private static List<List<Ingredient>> recipeMapIn = new ArrayList<List<Ingredient>>();
 	private static List<ItemStack> recipeMapOut = new ArrayList<ItemStack>();
-	private static List<ItemStack> alreadyChecked = new ArrayList<ItemStack>();
+	private static List<ItemStack> alreadyCheckedMain = new ArrayList<ItemStack>();
+	private static List<ItemStack> alreadyCheckedSec = new ArrayList<ItemStack>();
 	private static HashMap<ItemStack, Integer> permanentMappings = new HashMap<ItemStack, Integer>();
-	private static List<ItemStack> input = new ArrayList<ItemStack>();
+	private static List<List<ItemStack>> input = new ArrayList<List<ItemStack>>();
+	private static int inindex = 0;
 	private static boolean containsValue;
 	
 	public static void init() {
 		UnitMapping.clear();
-		alreadyChecked.clear();
+		alreadyCheckedMain.clear();
+		alreadyCheckedSec.clear();
 		recipeMapIn.clear();
 		recipeMapOut.clear();
+		input.clear();
+		inindex = 0;
 		UnitMapping.addAllMappings(Blocks.LOG, 8);
 		UnitMapping.addAllMappings(Blocks.LOG2, 8);
 		UnitMapping.addMapping(Items.IRON_INGOT, 16);
@@ -198,6 +203,14 @@ public class Mapper {
 		UnitMapping.addMapping(BlockHandler.condenser, 1000);
 		UnitMapping.addMapping(BlockHandler.inverter, 5000);
 		UnitMapping.addMapping(BlockHandler.printer, 1000);
+		UnitMapping.addMapping("ingotCopper", 15);
+		UnitMapping.addMapping("ingotSilver", 120);
+		UnitMapping.addMapping("ingotTin", 16);
+		UnitMapping.addMapping("ingotLead", 119);
+		UnitMapping.addMapping("ingotNickel", 17);
+		UnitMapping.addMapping("ingotAluminum", 20);
+		UnitMapping.addMapping("ingotSilvadrium", 500);
+		UnitMapping.addMapping("ingotShroomite", 1000);
 		
 		permanentMappings.forEach(new BiConsumer<ItemStack, Integer>(){
 			@Override
@@ -269,12 +282,17 @@ public class Mapper {
 	}
 
 	private static void deriveMapping(ItemStack stack, IForgeRegistry<IRecipe> recipes) {
-		deriveMapping(stack);
+		deriveMapping(stack, false);
 	}
 
-	private static void deriveMapping(ItemStack stack) {
-		if(!contains(alreadyChecked, stack)) {
-			alreadyChecked.add(stack);
+	private static void deriveMapping(ItemStack stack, boolean isSecondary) {
+		if(!contains(alreadyCheckedMain, stack)) {
+			if(!isSecondary) {
+				alreadyCheckedMain.add(stack);
+				alreadyCheckedSec.add(stack);
+			}else {
+				alreadyCheckedSec.add(stack);
+			}
 			if(!stack.isEmpty() && !UnitMapping.hasValueFor(stack)) {
 				int value = 0;
 				value = getValueFromOreDict(stack);
@@ -284,7 +302,7 @@ public class Mapper {
 					return;
 				}
 				
-				value = getValueAsRecipeOutput(stack);
+				value = getValueAsRecipeOutput(stack, isSecondary);
 				
 				if(value != 0) {
 					UnitMapping.addMapping(stack, value);
@@ -292,7 +310,7 @@ public class Mapper {
 					return;
 				}
 				
-				value = getValueAsSmeltingOutput(stack);
+				value = getValueAsSmeltingOutput(stack, isSecondary);
 				
 				if(value != 0) {
 					UnitMapping.addMapping(stack, value);
@@ -304,34 +322,45 @@ public class Mapper {
 		}
 	}
 
-	private static int getValueAsSmeltingOutput(ItemStack stack) {
+	private static int getValueAsSmeltingOutput(ItemStack stack, boolean isSecondary) {
 		if(stack.getItem().getRegistryName().getResourcePath().equals("iron") && stack.getItem().getRegistryName().getResourceDomain().equals("iron")) {
 			System.out.println("");
 		}
-		input.clear();
 		containsValue = false;
+		int inIndex = input.size();
+		inindex = inIndex;
 		FurnaceRecipes.instance().getSmeltingList().forEach(new BiConsumer<ItemStack, ItemStack>(){
 			@Override
 			public void accept(ItemStack instack, ItemStack outstack) {
 				if(ItemStackHelper.areStacksEqual(stack, outstack)) {
 					containsValue = true;
-					input.add(instack);
+					List<ItemStack> stacks = input.size() <= inindex ? new ArrayList<ItemStack>() : input.get(inindex);
+					stacks.add(instack);
+					if(input.size() <= inindex) {input.add(stacks);}else {input.set(inindex, stacks);}
 				}
 			}
 		});
 		if(containsValue) {
-			for(int i = 0; i < input.size(); i++) {
-				ItemStack in = input.get(i);
+			inIndex = input.size() - 1;
+			for(int i = 0; i < input.get(inIndex).size(); i++) {
+				ItemStack in = input.get(inIndex).get(i);
 				int value = 0;
 				if(UnitMapping.hasValueFor(in)) {
+//					alreadyCheckedSec.clear();
 					return UnitMapping.getValueFor(in) * 2;
 				}else {
-					deriveMapping(in);
+//					if(!contains(alreadyCheckedSec, in)) {
+						deriveMapping(in, true);
+//					}
 				}
 				if(UnitMapping.hasValueFor(in)) {
+//					alreadyCheckedSec.clear();
 					return UnitMapping.getValueFor(in) * 2;
 				}
 			}
+		}
+		if(!isSecondary) {
+//			alreadyCheckedSec.clear();
 		}
 		return 0;
 	}
@@ -345,7 +374,7 @@ public class Mapper {
 		return false;
 	}
 
-	private static int getValueAsRecipeOutput(ItemStack stack) {
+	private static int getValueAsRecipeOutput(ItemStack stack, boolean isSecondary) {
 		List<List<Ingredient>> ingredientsList = getIngredientsListFor(stack);
 		for(List<Ingredient> ingredients : ingredientsList) {
 			int totalValue = 0;
@@ -360,7 +389,9 @@ public class Mapper {
 								value = UnitMapping.getValueFor(itemstack);
 								gotValue = true;
 							}else {
-								deriveMapping(itemstack);
+								if(!contains(alreadyCheckedSec, itemstack)) {
+									deriveMapping(itemstack, true);
+								}
 							}
 							if(UnitMapping.hasValueFor(itemstack)) {
 								value = UnitMapping.getValueFor(itemstack);
@@ -377,8 +408,12 @@ public class Mapper {
 				}
 			}
 			if(totalValue != 0) {
+				alreadyCheckedSec.clear();
 				return totalValue / (recipeMapOut.get(recipeMapIn.indexOf(ingredients)).getCount());
 			}
+		}
+		if(!isSecondary) {
+			alreadyCheckedSec.clear();
 		}
 		return 0;
 	}
