@@ -386,16 +386,48 @@ public class Mapper {
 					for(ItemStack itemstack : itemstacks) {
 						if(!gotValue) {
 							if(UnitMapping.hasValueFor(itemstack)) {
-								value = UnitMapping.getValueFor(itemstack);
-								gotValue = true;
+								if(itemstack.getItem().hasContainerItem(itemstack)) {
+									ItemStack container = itemstack.getItem().getContainerItem(itemstack);
+									if(UnitMapping.hasValueFor(container)) {
+										value = UnitMapping.getValueFor(itemstack) - UnitMapping.getValueFor(container);
+										gotValue = true;
+									}else {
+										if(!contains(alreadyCheckedSec, container)) {
+											deriveMapping(container, true);
+										}
+									}
+									if(UnitMapping.hasValueFor(container)) {
+										value = UnitMapping.getValueFor(itemstack) - UnitMapping.getValueFor(container);
+										gotValue = true;
+									}
+								}else {
+									value = UnitMapping.getValueFor(itemstack);
+									gotValue = true;
+								}
 							}else {
 								if(!contains(alreadyCheckedSec, itemstack)) {
 									deriveMapping(itemstack, true);
 								}
 							}
 							if(UnitMapping.hasValueFor(itemstack)) {
-								value = UnitMapping.getValueFor(itemstack);
-								gotValue = true;
+								if(itemstack.getItem().hasContainerItem(itemstack)) {
+									ItemStack container = itemstack.getItem().getContainerItem(itemstack);
+									if(UnitMapping.hasValueFor(container)) {
+										value = UnitMapping.getValueFor(itemstack) - UnitMapping.getValueFor(container);
+										gotValue = true;
+									}else {
+										if(!contains(alreadyCheckedSec, container)) {
+											deriveMapping(container, true);
+										}
+									}
+									if(UnitMapping.hasValueFor(container)) {
+										value = UnitMapping.getValueFor(itemstack) - UnitMapping.getValueFor(container);
+										gotValue = true;
+									}
+								}else {
+									value = UnitMapping.getValueFor(itemstack);
+									gotValue = true;
+								}
 							}
 						}
 					}

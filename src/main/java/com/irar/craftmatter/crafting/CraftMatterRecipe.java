@@ -54,7 +54,13 @@ public class CraftMatterRecipe implements IRecipe{
 	public ItemStack getCraftingResult(InventoryCrafting inv) {
 		int value = 0;
 		for(int i = 0; i < inv.getSizeInventory(); i++){
-			value += UnitMapping.getValueFor(inv.getStackInSlot(i));
+			ItemStack stack = inv.getStackInSlot(i);
+			if(stack.getItem().hasContainerItem(stack)) {
+				ItemStack container = stack.getItem().getContainerItem(stack);
+				value += UnitMapping.getValueFor(stack) - UnitMapping.getValueFor(container);
+			}else {
+				value += UnitMapping.getValueFor(stack);
+			}
 		}
 		
 		if(value > 0) {
