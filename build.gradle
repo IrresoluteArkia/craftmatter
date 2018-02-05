@@ -8,6 +8,7 @@ buildscript {
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'maven'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
@@ -76,6 +77,11 @@ processResources {
     }
 }
 
+sourceSets {
+    api
+    main
+}
+
 task apiJar(type: Jar) {
     classifier = 'api'
     from sourceSets.api.output
@@ -84,4 +90,16 @@ task apiJar(type: Jar) {
     // https://github.com/MinecraftForge/ForgeGradle/issues/369
     // Gradle should be able to pull them from the -sources jar.
     from sourceSets.api.allJava
+}
+
+jar {
+    from sourceSets.api.output
+    from sourceSets.main.output
+}
+
+install {
+    repositories.mavenInstaller {
+        addFilter('api') { artifact, file -> artifact.name.endsWith('api') }
+        addFilter('main') { artifact, file -> artifact.name.endsWith('main') }
+    }
 }
