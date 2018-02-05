@@ -323,7 +323,7 @@ public class Mapper {
 	}
 
 	private static int getValueAsSmeltingOutput(ItemStack stack, boolean isSecondary) {
-		if(stack.getItem().getRegistryName().getResourcePath().equals("iron") && stack.getItem().getRegistryName().getResourceDomain().equals("iron")) {
+		if(stack.getItem().getRegistryName().getResourcePath().equals("audu_ingot")) {
 			System.out.println("");
 		}
 		containsValue = false;
@@ -360,14 +360,14 @@ public class Mapper {
 			}
 		}
 		if(!isSecondary) {
-//			alreadyCheckedSec.clear();
+			alreadyCheckedSec.clear();
 		}
 		return 0;
 	}
 
 	private static boolean contains(List<ItemStack> alreadyChecked, ItemStack stack) {
 		for(ItemStack itemstack : alreadyChecked) {
-			if(itemstack.isItemEqual(stack)) {
+			if(isItemEqual(itemstack, stack)) {
 				return true;
 			}
 		}
@@ -453,11 +453,19 @@ public class Mapper {
 	private static List<List<Ingredient>> getIngredientsListFor(ItemStack stack) {
 		List<List<Ingredient>> ingredientsList = new ArrayList<List<Ingredient>>();
 		for(int i = 0; i < recipeMapOut.size(); i++) {
-			if(recipeMapOut.get(i).isItemEqual(stack)) {
+			if(isItemEqual(recipeMapOut.get(i), stack)) {
 				ingredientsList.add(recipeMapIn.get(i));
 			}
 		}
 		return ingredientsList;
+	}
+
+	private static boolean isItemEqual(ItemStack itemStack, ItemStack stack) {
+		if(itemStack.getMetadata() == OreDictionary.WILDCARD_VALUE || stack.getMetadata() == OreDictionary.WILDCARD_VALUE) {
+			return itemStack.getItem().equals(stack.getItem());
+		}else {
+			return itemStack.getItem().equals(stack.getItem()) && stack.getMetadata() == itemStack.getMetadata();
+		}
 	}
 
 	private static int getValueFromOreDict(ItemStack stack) {
