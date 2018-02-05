@@ -2,6 +2,7 @@ package com.irar.craftmatter.crafting;
 
 import java.util.ArrayList;
 
+import com.irar.craftmatter.handlers.PluginHandler;
 import com.irar.craftmatter.item.ItemAntiCraft;
 import com.irar.craftmatter.item.ItemAntiItem;
 import com.irar.craftmatter.item.ItemCraft;
@@ -72,8 +73,10 @@ public class UnitMapping {
 			stacks.add(itemstack);
 		}
 		
-		registryNames.addAll(stacks);
-		values.add(value);
+		for(ItemStack stack : stacks) {
+			registryNames.add(stack);
+			values.add(value);
+		}
 	}
 	
 	public static int getValueFor(Block block) {
@@ -103,7 +106,9 @@ public class UnitMapping {
 		if(stack.isEmpty()) {
 			return 0;
 		}
-		if(stack.getItem() instanceof ItemCraft) {
+		if(PluginHandler.customValueRegistry.hasValueFor(stack)) {
+			return PluginHandler.customValueRegistry.getValueFor(stack);
+		}else if(stack.getItem() instanceof ItemCraft) {
 			value = ItemCraft.getAmount(stack);
 		}else if(stack.getItem() instanceof ItemAntiCraft) {
 			value = - ItemAntiCraft.getAmount(stack);
@@ -133,7 +138,10 @@ public class UnitMapping {
 		if(stack.isEmpty()) {
 			return false;
 		}
-		if(stack.getItem() instanceof ItemCraft) {
+		
+		if(PluginHandler.customValueRegistry.hasValueFor(stack)) {
+			return true;
+		}else if(stack.getItem() instanceof ItemCraft) {
 			return false;
 		}else if(stack.getItem() instanceof ItemAntiCraft) {
 			return false;
