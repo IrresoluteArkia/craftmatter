@@ -97,7 +97,7 @@ public class CraftMatter {
         		if(stack.getSender().equals(value.getSender())) {
 	        		processedMessages.add(stack);
 	        		processedMessages.add(value);
-	    	    	if(!stack.getItemStackValue().isEmpty() && Integer.parseInt(value.getStringValue()) != 0) {
+	    	    	if(!stack.getItemStackValue().isEmpty()) {
 	    	    		Mapper.addPermanentMapping(stack.getItemStackValue(), Integer.parseInt(value.getStringValue()));
 	    	    		System.out.println("Registered mapping from mod: " + stack.getSender());
 	    	    	}
