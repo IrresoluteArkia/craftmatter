@@ -48,6 +48,9 @@ public class PluginHandler {
 	
 	public static void init(ASMDataTable asmDataTable) {
 		plugins = Util.getModPlugins(asmDataTable);
+		for(IModPlugin plugin : plugins) {
+			plugin.registerCustomValues(customValueRegistry);
+		}
 	}
 	
 	
