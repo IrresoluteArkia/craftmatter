@@ -14,6 +14,7 @@ import com.irar.craftmatter.config.ConfigHandler;
 import com.irar.craftmatter.handlers.BlockHandler;
 import com.irar.craftmatter.handlers.CraftingHandler;
 import com.irar.craftmatter.handlers.ItemHandler;
+import com.irar.craftmatter.handlers.PluginHandler;
 import com.irar.craftmatter.item.IDontShowMatter;
 import com.irar.craftmatter.item.ItemAntiItem;
 import com.irar.craftmatter.network.CraftMessage;
@@ -90,6 +91,8 @@ public class CommonProxy implements IProxy{
 		RenderingRegistry.registerEntityRenderingHandler(EntityGrenade.class, new FactoryGrenade());
 		CraftPacketHandler.INSTANCE.registerMessage(CraftMessageHandler.class, CraftMessage.class, 0, Side.SERVER);
 		CraftPacketHandler.INSTANCE.registerMessage(CraftMessageHandler.class, CraftMessage.class, 1, Side.CLIENT);
+		
+		PluginHandler.init(event.getAsmData());
 	}
 
 	@Override
