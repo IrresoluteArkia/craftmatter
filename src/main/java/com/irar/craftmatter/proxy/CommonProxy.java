@@ -6,8 +6,10 @@ import java.util.Random;
 
 import com.irar.craftmatter.CraftMatter;
 import com.irar.craftmatter.crafting.Mapper;
+import com.irar.craftmatter.crafting.UnitMapping;
 import com.irar.craftmatter.entity.projectile.EntityGrenade;
 import com.irar.craftmatter.client.renderer.factory.FactoryGrenade;
+import com.irar.craftmatter.config.ConfigBooleans;
 import com.irar.craftmatter.config.ConfigHandler;
 import com.irar.craftmatter.handlers.BlockHandler;
 import com.irar.craftmatter.handlers.CraftingHandler;
@@ -20,6 +22,9 @@ import com.irar.craftmatter.tileentity.ModTileEntities;
 import com.irar.craftmatter.tileentity.TileBlueMaker;
 
 import net.minecraft.client.main.Main;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ModelManager;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -29,17 +34,21 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.IRegistry;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -60,6 +69,7 @@ public class CommonProxy implements IProxy{
 	
 //	public static SaveDataHandler saveData;
 	public static IForgeRegistry<IRecipe> recipeRegistry;
+	public static IRegistry<ModelResourceLocation, IBakedModel> modelRegistry;
 
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
@@ -93,6 +103,28 @@ public class CommonProxy implements IProxy{
 			recipeRegistry = event.getRegistry();
 		}
 
+		@SubscribeEvent
+		public void ModelBaked(ModelBakeEvent event) {
+			modelRegistry = event.getModelRegistry();
+			System.out.println("Model Registry Updated!!!");
+		}
+		
+		@SubscribeEvent
+		public void Tooltip(ItemTooltipEvent event){
+			if(ConfigBooleans.SHOW_TOOLTIP.currentValue) {
+				ItemStack stack = event.getItemStack();
+				int amount = UnitMapping.getValueFor(stack);
+				event.getToolTip().add("Worth " + amount + " " + getPlural("Unit", amount) + " Of Matter");
+			}
+		}
+
+		private String getPlural(String string, int amount) {
+			if(amount != 1) {
+				return string + "s";
+			}
+			return string;
+		}
+		
 //		@SubscribeEvent
 /*		public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event){
 			if(!event.player.world.isRemote) {

@@ -1,14 +1,18 @@
 package com.irar.craftmatter.item;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
 import com.irar.craftmatter.Ref;
 import com.irar.craftmatter.handlers.CreativeTabsHandler;
 import com.irar.craftmatter.handlers.ItemHandler;
+import com.irar.craftmatter.proxy.CommonProxy;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,12 +26,15 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.client.ItemModelMesherForge;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemAntiItem extends Item implements ItemMeshDefinition{
 	
 	public static final String STACK_KEY = Ref.MODID + "_" + "CRAFT_STACK_NBT_KEY";
+	private ModelResourceLocation locb = null;
 	
 	public ItemAntiItem(String name){
 		setUnlocalizedName(name);
@@ -46,7 +53,7 @@ public class ItemAntiItem extends Item implements ItemMeshDefinition{
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn){
 		
 		if(stack.hasTagCompound() && stack.getTagCompound().hasKey(STACK_KEY)){
-			tooltip.add("Put This In The Antimatter Inverter To Get The Real Version Of This");
+			tooltip.add("Put In The Antimatter Inverter");
 		}else{
 			tooltip.add("Invalid Itemstack: please get this item through proper methods!");
 		}
@@ -77,7 +84,21 @@ public class ItemAntiItem extends Item implements ItemMeshDefinition{
 		if(stack.hasTagCompound() && stack.getTagCompound().hasKey(STACK_KEY)) {
 			NBTTagCompound stackData = (NBTTagCompound) stack.getTagCompound().getTag(STACK_KEY);
 			ItemStack itemstack = new ItemStack(stackData);
-			return new ModelResourceLocation(itemstack.getItem().getRegistryName(), "inventory");
+			IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(itemstack);
+			CommonProxy.modelRegistry.getKeys().forEach(new Consumer<ModelResourceLocation>() {
+				@Override
+				public void accept(ModelResourceLocation arg0) {
+					if(CommonProxy.modelRegistry.getObject(arg0).equals(model)) {
+						locb = arg0;
+					}
+				}
+			});
+			if(locb == null) {
+//				System.out.println("Couldn't find texture! Trying to find a substitute!");
+				locb = new ModelResourceLocation(itemstack.getItem().getRegistryName(), "inventory");
+			}
+//			System.out.println(locb.toString());
+			return locb;
 		}else {
 			return new ModelResourceLocation(this.getRegistryName(), "inventory");
 		}
