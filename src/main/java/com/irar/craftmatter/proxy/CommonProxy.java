@@ -14,6 +14,7 @@ import com.irar.craftmatter.config.ConfigHandler;
 import com.irar.craftmatter.handlers.BlockHandler;
 import com.irar.craftmatter.handlers.CraftingHandler;
 import com.irar.craftmatter.handlers.ItemHandler;
+import com.irar.craftmatter.item.IDontShowMatter;
 import com.irar.craftmatter.network.CraftMessage;
 import com.irar.craftmatter.network.CraftMessageHandler;
 import com.irar.craftmatter.network.CraftPacketHandler;
@@ -113,8 +114,10 @@ public class CommonProxy implements IProxy{
 		public void Tooltip(ItemTooltipEvent event){
 			if(ConfigBooleans.SHOW_TOOLTIP.currentValue) {
 				ItemStack stack = event.getItemStack();
-				int amount = UnitMapping.getValueFor(stack);
-				event.getToolTip().add("Worth " + amount + " " + getPlural("Unit", amount) + " Of Matter");
+				if(!(stack.getItem() instanceof IDontShowMatter)) {
+					int amount = UnitMapping.getValueFor(stack);
+					event.getToolTip().add("Worth " + Math.abs(amount) + " " + getPlural("Unit", Math.abs(amount)) + " Of "  + (amount >= 0 ? "Matter" : "Antimatter"));
+				}
 			}
 		}
 

@@ -20,7 +20,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemCraft extends Item{
+public class ItemCraft extends Item implements IDontShowMatter{
 	
 	public static final String AMOUNT_KEY = Ref.MODID + "_" + "CRAFT_AMOUNT_KEY";
 	
@@ -42,7 +42,11 @@ public class ItemCraft extends Item{
 		
 		if(stack.hasTagCompound() && stack.getTagCompound().hasKey(AMOUNT_KEY)){
 			int amount = stack.getTagCompound().getInteger(AMOUNT_KEY);
-			tooltip.add("Contains " + amount + " Units Of Matter");
+			if(amount > 0) {
+				tooltip.add("Contains " + amount + " Units Of Matter");
+			}else {
+				tooltip.add("Any amount");
+			}
 		}else{
 			tooltip.add("Invalid Units: please get this item through proper methods e.g. practically any crafting recipe!");
 		}

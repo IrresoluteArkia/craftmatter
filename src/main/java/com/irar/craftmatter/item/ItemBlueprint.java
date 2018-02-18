@@ -20,7 +20,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemBlueprint extends Item{
+public class ItemBlueprint extends Item implements IDontShowMatter{
 	
 //	public static final String ITEM_KEY = Ref.MODID + "_" + "CRAFT_ITEM_KEY";
 	public static final String AMOUNT_KEY = Ref.MODID + "_" + "CRAFT_AMOUNT_KEY";

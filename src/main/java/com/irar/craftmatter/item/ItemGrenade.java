@@ -24,7 +24,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
-public class ItemGrenade extends Item{
+public class ItemGrenade extends Item implements IDontShowMatter{
 	public static final String AMOUNT_KEY = Ref.MODID + "_" + "CRAFT_AMOUNT_KEY";
 
 	public ItemGrenade(String name){

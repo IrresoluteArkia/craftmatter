@@ -1,5 +1,7 @@
 package com.irar.craftmatter.crafting;
 
+import com.irar.craftmatter.handlers.BlockHandler;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 
@@ -416,6 +418,10 @@ public class Mapper {
 		UnitMapping.addMapping(Items.WOODEN_SWORD, 5);
 		UnitMapping.addMapping(Items.WRITABLE_BOOK, 30);
 		UnitMapping.addMapping(Items.WRITTEN_BOOK, 50);
+		UnitMapping.addMapping(BlockHandler.blueprintMaker, 10);
+		UnitMapping.addMapping(BlockHandler.condenser, 1000);
+		UnitMapping.addMapping(BlockHandler.inverter, 5000);
+		UnitMapping.addMapping(BlockHandler.printer, 1000);
 	}
 	
 }
