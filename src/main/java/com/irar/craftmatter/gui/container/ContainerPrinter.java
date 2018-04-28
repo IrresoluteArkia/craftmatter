@@ -25,8 +25,9 @@ public class ContainerPrinter extends Container{
 	        }
 	    }
 */
-		this.addSlotToContainer(new Slot(tilePrinter, 0, 62 + 18, 17));
-        this.addSlotToContainer(new Slot(tilePrinter, 1, 62 + 18, 17 + 36));
+		this.addSlotToContainer(new Slot(tilePrinter, 0, 62, 17));
+        this.addSlotToContainer(new Slot(tilePrinter, 1, 62 + 36, 17));
+        this.addSlotToContainer(new Slot(tilePrinter, 2, 62 + 18, 17 + 36));
 
 	    // Player Inventory, Slot 9-35, Slot IDs 9-35
 	    for (int y = 0; y < 3; ++y) {
@@ -57,14 +58,14 @@ public class ContainerPrinter extends Container{
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            if (fromSlot < 2)
+            if (fromSlot < 3)
             {
-                if (!this.mergeItemStack(itemstack1, 2, 39, true))
+                if (!this.mergeItemStack(itemstack1, 3, 39, true))
                 {
                     return ItemStack.EMPTY;
                 }
             }
-            else if (!this.mergeItemStack(itemstack1, 0, 2, false))
+            else if (!this.mergeItemStack(itemstack1, 0, 3, false))
             {
                 return ItemStack.EMPTY;
             }

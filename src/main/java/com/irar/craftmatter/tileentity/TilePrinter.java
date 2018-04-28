@@ -32,7 +32,7 @@ public class TilePrinter extends TileEntity implements ITickable, IInventory{
 	
 	private Random rand = new Random();
 	public int tickNum = 0;
-    private NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(2, ItemStack.EMPTY);
+    private NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(3, ItemStack.EMPTY);
     private String customName = "Antimatter Printer";
 	public int amountMatter;
 	private int matterNeeded = 100;
@@ -62,12 +62,9 @@ public class TilePrinter extends TileEntity implements ITickable, IInventory{
 			if(!this.world.isRemote) {
 				CommonProxy.updatePacket();
 			}
-//			this.readFromNBT(this.writeToNBT(new NBTTagCompound()));
+			this.readFromNBT(this.writeToNBT(new NBTTagCompound()));
 		}
-/*		if(this.tickNum % 20 == 0) {
-			System.out.println(this.amountMatter);
-		}*/
-		ItemStack result = inventory.get(1);
+/*		ItemStack result = inventory.get(1);
 		ItemStack matter = inventory.get(0);
 		if(!matter.isEmpty() && matter.getItem() instanceof ItemCraft) {
 			this.amountMatter += matter.getCount();
@@ -86,7 +83,43 @@ public class TilePrinter extends TileEntity implements ITickable, IInventory{
 				inventory.set(1, ItemAntiCraft.getCraftAntiMatterWithUnits(1));
 			}
 			this.markDirty();
+		}*///accidentally wrote code for something else here... oops
+		//   will definitely move it later
+		ItemStack resultItem = ItemStack.EMPTY;
+		ItemStack toMake = inventory.get(0);
+		if(!toMake.isEmpty() && toMake.getItem() instanceof ItemBlueprint) {
+			if(ItemBlueprint.getAmount(toMake) > 0) {
+				isValid = true;
+				matterNeeded = ItemBlueprint.getAmount(toMake);
+				resultItem = ItemBlueprint.getContainedItemStack(toMake);
+			}
+		}else {
+			isValid = false;
+			matterNeeded = 0;
 		}
+		ItemStack matter = inventory.get(1);
+		ItemStack result = inventory.get(2);
+		if(!matter.isEmpty() && matter.getItem() instanceof ItemCraft) {
+			this.amountMatter += matter.getCount();
+			if(ItemCraft.getAmount(matter) == 1) {
+				inventory.set(1, ItemStack.EMPTY);
+			}else {
+				ItemCraft.setAmount(matter, ItemCraft.getAmount(matter) - 1);
+			}
+			this.markDirty();
+		}
+		if((result.isEmpty() || (result.getItem().equals(resultItem.getItem()) && result.getCount() < 64)) && isValid && matterNeeded < amountMatter) {
+			amountMatter -= matterNeeded;
+			if(result.getItem().equals(resultItem.getItem())) {
+				ItemStack toStore = resultItem.copy();
+				toStore.setCount(inventory.get(2).getCount() + 1);
+				inventory.set(2, toStore);
+			}else {
+				inventory.set(2, resultItem);
+			}
+			this.markDirty();
+		}
+
 	}
 
 	@Override
@@ -101,11 +134,11 @@ public class TilePrinter extends TileEntity implements ITickable, IInventory{
 
 	@Override
 	public int getSizeInventory() {
-		return 2;
+		return 3;
 	}
 
 	public static int getSizeInventory(int i) {
-		return 2;
+		return 3;
 	}
 
 	@Override
