@@ -48,7 +48,7 @@ public class ItemCraft extends Item implements IDontShowMatter{
 				tooltip.add("Any amount");
 			}
 		}else{
-			tooltip.add("Invalid Units: please get this item through proper methods e.g. practically any crafting recipe!");
+			tooltip.add("Invalid Units: please get this item through proper methods e.g. the matter crafter!");
 		}
 		
 		super.addInformation(stack, worldIn, tooltip, flagIn);
