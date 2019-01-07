@@ -203,6 +203,7 @@ public class Mapper {
 		UnitMapping.addMapping(BlockHandler.condenser, 1000);
 		UnitMapping.addMapping(BlockHandler.inverter, 5000);
 		UnitMapping.addMapping(BlockHandler.printer, 1000);
+		UnitMapping.addMapping(BlockHandler.antiBlock, -5);
 		UnitMapping.addMapping("ingotCopper", 15);
 		UnitMapping.addMapping("ingotSilver", 120);
 		UnitMapping.addMapping("ingotTin", 16);

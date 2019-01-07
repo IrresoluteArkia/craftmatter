@@ -1,5 +1,6 @@
 package com.irar.craftmatter.handlers;
 
+import com.irar.craftmatter.config.ConfigBooleans;
 import com.irar.craftmatter.crafting.CraftMatterRecipe;
 import com.irar.craftmatter.crafting.GrenadeRecipe;
 import com.irar.craftmatter.item.ItemAntiCraft;
@@ -15,9 +16,20 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class CraftingHandler {
 
 	public static void init() {
-		CommonProxy.recipeRegistry.register(new CraftMatterRecipe());
+		if(ConfigBooleans.CRAFT_IN_TABLE.currentValue) {
+			CommonProxy.recipeRegistry.register(new CraftMatterRecipe());
+		}
 		CommonProxy.recipeRegistry.register(new GrenadeRecipe());
 		
+		GameRegistry.addShapedRecipe(new ResourceLocation("craftmatter:recipe0"), new ResourceLocation("craftmatter"), new ItemStack(BlockHandler.matterCrafter), new Object[] {
+				"S S",
+				" C ",
+				"S S",
+				'S',
+				Items.STICK,
+				'C',
+				Blocks.CRAFTING_TABLE
+		});
 		GameRegistry.addShapedRecipe(new ResourceLocation("craftmatter:recipe1"), new ResourceLocation("craftmatter"), new ItemStack(BlockHandler.blueprintMaker), new Object[] {
 				"LML",
 				"MCM",

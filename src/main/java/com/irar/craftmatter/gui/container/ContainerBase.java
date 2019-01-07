@@ -3,6 +3,7 @@ package com.irar.craftmatter.gui.container;
 import javax.annotation.Nullable;
 
 import com.irar.craftmatter.gui.slot.SlotStoredMatter;
+import com.irar.craftmatter.tileentity.Stores;
 import com.irar.craftmatter.tileentity.TileBase;
 import com.irar.craftmatter.tileentity.TileBlueMaker;
 
@@ -19,7 +20,9 @@ public class ContainerBase extends Container{
 	
 	public ContainerBase(InventoryPlayer playerInv, TileBase tileBase){
 		this.te = tileBase;
-		this.addSlotToContainer(new SlotStoredMatter(tileBase));
+		if(!tileBase.storesMatter.equals(Stores.NEITHER)) {
+			this.addSlotToContainer(new SlotStoredMatter(tileBase));
+		}
 	    for (int y = 0; y < 3; ++y) {
 	        for (int x = 0; x < 9; ++x) {
 	            this.addSlotToContainer(new Slot(playerInv, x + y * 9 + 9, 8 + x * 18, 84 + y * 18));
@@ -47,14 +50,14 @@ public class ContainerBase extends Container{
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            if (fromSlot < sizeInv)
+            if (fromSlot < 36)
             {
-                if (!this.mergeItemStack(itemstack1, sizeInv, 36 + sizeInv, true))
+                if (!this.mergeItemStack(itemstack1, 36, 36 + sizeInv, false))
                 {
                     return ItemStack.EMPTY;
                 }
             }
-            else if (!this.mergeItemStack(itemstack1, 0, sizeInv, false))
+            else if (!this.mergeItemStack(itemstack1, 0, 36, true))
             {
                 return ItemStack.EMPTY;
             }

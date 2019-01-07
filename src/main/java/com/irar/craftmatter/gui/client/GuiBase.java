@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import com.irar.craftmatter.gui.container.ContainerBase;
 import com.irar.craftmatter.gui.container.ContainerBlueMaker;
+import com.irar.craftmatter.tileentity.Stores;
 import com.irar.craftmatter.tileentity.TileBase;
 import com.irar.craftmatter.tileentity.TileBlueMaker;
 
@@ -77,11 +78,12 @@ public class GuiBase extends GuiContainer {
     }
     
     private String matter() {
-    	if(this.te.storesMatter) {
+    	if(this.te.storesMatter.equals(Stores.MATTER)) {
     		return "Matter";
-    	}else {
+    	}else if(this.te.storesMatter.equals(Stores.ANTIMATTER)){
     		return "Antimatter";
     	}
+    	return "";
     }
     
 }
