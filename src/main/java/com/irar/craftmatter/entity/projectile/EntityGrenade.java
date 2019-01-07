@@ -120,7 +120,8 @@ public class EntityGrenade extends EntityThrowable
     				if(toAdd.size() < ConfigInts.ANTI_GRENADE_BLOCKS_PER_TICK.currentValue) {
     					int messiness = 2;
     					if(!this.world.getBlockState(pos).getBlock().equals(Blocks.AIR)) {
-    						this.world.setBlockState(pos, BlockHandler.antimatter.getDefaultState());
+    						this.world.setBlockToAir(pos);
+//    						this.world.setBlockState(pos, BlockHandler.antimatter.getDefaultState());
     					}
 	    				if(!this.world.getBlockState(pos.up()).getBlock().equals(Blocks.AIR) && !this.world.getBlockState(pos.up()).getBlock().equals(BlockHandler.antimatter) && !this.world.getBlockState(pos.up()).getBlock().equals(BlockHandler.antiBlock) && r.nextInt(messiness) == 0) {
 	    					if(this.antimatterRemaining > 0 && !this.hasBeenDestroyed.contains(pos.up())) {
