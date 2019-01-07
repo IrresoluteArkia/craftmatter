@@ -82,10 +82,10 @@ public class CommonProxy implements IProxy{
 		new ConfigHandler(event.getSuggestedConfigurationFile());
         final MainEventHandler handler = new MainEventHandler();
         MinecraftForge.EVENT_BUS.register((Object)handler);
-		ItemHandler.init();
-		ItemHandler.register();
 		BlockHandler.init();
+		ItemHandler.init();
 		BlockHandler.register();
+		ItemHandler.register();
 		ModTileEntities.init();
 		NetworkRegistry.INSTANCE.registerGuiHandler(CraftMatter.instance, new GuiHandler());
 		RenderingRegistry.registerEntityRenderingHandler(EntityGrenade.class, new FactoryGrenade());
