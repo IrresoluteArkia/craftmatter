@@ -8,5 +8,6 @@ tile.antimatter_printer.name=Antimatter Printer
 tile.antimatter_condenser.name=Antimatter Condenser
 tile.antimatter_inverter.name=Antimatter Inverter
 tile.anti_block.name=Antimatter Block
+tile.matter_crafter.name=Matter Crafter
 
 itemGroup.craftmatter=Craft Matter

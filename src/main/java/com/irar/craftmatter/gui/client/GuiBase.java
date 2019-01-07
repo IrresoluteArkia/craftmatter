@@ -20,6 +20,7 @@ public class GuiBase extends GuiContainer {
 	protected IInventory playerInv;
 	protected TileBase te;
 	private String nameWithUnderscore;
+	protected int textColor = 0;
 //	private Class<? extends ContainerBase> containerClass = ContainerBase.class;
 
 	public GuiBase(InventoryPlayer playerInv, TileBase te, Class<? extends ContainerBase> containerClass, String nameWithUnderscore) {
@@ -67,14 +68,14 @@ public class GuiBase extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
-        this.fontRenderer.drawString(this.te.getDisplayName().getUnformattedText(), 8, 4, 0);
+        this.fontRenderer.drawString(this.te.getDisplayName().getUnformattedText(), 8, 4, textColor);
         if(this.te.displayMatter) {
-	        this.fontRenderer.drawString("Units Of " + matter() + ": " + this.te.getAmountMatter(), 8, 34, 0);
+	        this.fontRenderer.drawString("Units Of " + matter() + ": " + this.te.getAmountMatter(), 8, 34, textColor);
 	        if(this.te.isValidRecipe()) {
-	        	this.fontRenderer.drawString(matter() + " Needed: " + this.te.getMatterNeeded(), 8, 44, 0);
+	        	this.fontRenderer.drawString(matter() + " Needed: " + this.te.getMatterNeeded(), 8, 44, textColor);
 	        }
         }
-        this.fontRenderer.drawString(this.playerInv.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 0);
+        this.fontRenderer.drawString(this.playerInv.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, textColor);
     }
     
     private String matter() {

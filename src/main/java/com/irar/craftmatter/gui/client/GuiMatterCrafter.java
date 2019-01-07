@@ -15,5 +15,6 @@ public class GuiMatterCrafter extends GuiBase {
 
 	public GuiMatterCrafter(InventoryPlayer playerInv, TileMatterCrafter te) {
 	    super(playerInv, te, ContainerMatterCrafter.class, "matter_crafter");
+	    this.textColor = 16777215;
 	}   
 }

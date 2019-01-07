@@ -1,0 +1,36 @@
+{
+    "parent": "minecraft:block/block",
+    "ambientocclusion": true,
+    "textures": {
+        "side": "craftmatter:blocks/matter_crafter_side",
+        "side2": "craftmatter:blocks/matter_crafter_side_2",
+        "particle": "craftmatter:blocks/matter_crafter_top",
+        "bottom": "craftmatter:blocks/matter_crafter_bottom"
+    },
+    "elements": [
+        {
+            "from": [0,0,0],
+            "to": [16,16,16],
+            "faces": {
+                "up": {
+                    "texture": "#particle"
+                },
+                "down": {
+                    "texture": "#bottom"
+                },
+                "west": {
+                    "texture": "#side"
+                },
+                "east": {
+                    "texture": "#side"
+                },
+                "north": {
+                    "texture": "#side2"
+                },
+                "south": {
+                    "texture": "#side"
+                }
+            }
+        }
+    ]
+}
