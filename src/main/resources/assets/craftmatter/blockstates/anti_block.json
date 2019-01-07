@@ -1,0 +1,9 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "decayable": {
+            "true": { "model": "craftmatter:anti_block" },
+            "false": { "model": "craftmatter:anti_block" }
+        }
+    }
+}
