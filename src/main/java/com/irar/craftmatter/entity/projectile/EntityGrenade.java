@@ -120,39 +120,39 @@ public class EntityGrenade extends EntityThrowable
     				if(toAdd.size() < ConfigInts.ANTI_GRENADE_BLOCKS_PER_TICK.currentValue) {
     					int messiness = 2;
     					if(!this.world.getBlockState(pos).getBlock().equals(Blocks.AIR)) {
-    						this.world.setBlockState(pos, BlockHandler.antiBlock.getDefaultState());
+    						this.world.setBlockState(pos, BlockHandler.antimatter.getDefaultState());
     					}
-	    				if(!this.world.getBlockState(pos.up()).getBlock().equals(Blocks.AIR) && !this.world.getBlockState(pos.up()).getBlock().equals(BlockHandler.antiBlock) && r.nextInt(messiness) == 0) {
+	    				if(!this.world.getBlockState(pos.up()).getBlock().equals(Blocks.AIR) && !this.world.getBlockState(pos.up()).getBlock().equals(BlockHandler.antimatter) && !this.world.getBlockState(pos.up()).getBlock().equals(BlockHandler.antiBlock) && r.nextInt(messiness) == 0) {
 	    					if(this.antimatterRemaining > 0 && !this.hasBeenDestroyed.contains(pos.up())) {
 	    						toAdd.add(pos.up());
 	    						this.antimatterRemaining--;
 	    					}
 	    				}
-	    				if(!this.world.getBlockState(pos.down()).getBlock().equals(Blocks.AIR) && !this.world.getBlockState(pos.down()).getBlock().equals(BlockHandler.antiBlock) && r.nextInt(messiness) == 0) {
+	    				if(!this.world.getBlockState(pos.down()).getBlock().equals(Blocks.AIR) && !this.world.getBlockState(pos.down()).getBlock().equals(BlockHandler.antimatter) && !this.world.getBlockState(pos.up()).getBlock().equals(BlockHandler.antiBlock) && r.nextInt(messiness) == 0) {
 	    					if(this.antimatterRemaining > 0 && !this.hasBeenDestroyed.contains(pos.down())) {
 	    						toAdd.add(pos.down());
 	    						this.antimatterRemaining--;
 	    					}
 	    				}
-	    				if(!this.world.getBlockState(pos.north()).getBlock().equals(Blocks.AIR) && !this.world.getBlockState(pos.north()).getBlock().equals(BlockHandler.antiBlock) && r.nextInt(messiness) == 0) {
+	    				if(!this.world.getBlockState(pos.north()).getBlock().equals(Blocks.AIR) && !this.world.getBlockState(pos.north()).getBlock().equals(BlockHandler.antimatter) && !this.world.getBlockState(pos.up()).getBlock().equals(BlockHandler.antiBlock) && r.nextInt(messiness) == 0) {
 	    					if(this.antimatterRemaining > 0 && !this.hasBeenDestroyed.contains(pos.north())) {
 	    						toAdd.add(pos.north());
 	    						this.antimatterRemaining--;
 	    					}
 	    				}
-	    				if(!this.world.getBlockState(pos.south()).getBlock().equals(Blocks.AIR) && !this.world.getBlockState(pos.south()).getBlock().equals(BlockHandler.antiBlock) && r.nextInt(messiness) == 0) {
+	    				if(!this.world.getBlockState(pos.south()).getBlock().equals(Blocks.AIR) && !this.world.getBlockState(pos.south()).getBlock().equals(BlockHandler.antimatter) && !this.world.getBlockState(pos.up()).getBlock().equals(BlockHandler.antiBlock) && r.nextInt(messiness) == 0) {
 	    					if(this.antimatterRemaining > 0 && !this.hasBeenDestroyed.contains(pos.south())) {
 	    						toAdd.add(pos.south());
 	    						this.antimatterRemaining--;
 	    					}
 	    				}
-	    				if(!this.world.getBlockState(pos.east()).getBlock().equals(Blocks.AIR) && !this.world.getBlockState(pos.east()).getBlock().equals(BlockHandler.antiBlock) && r.nextInt(messiness) == 0) {
+	    				if(!this.world.getBlockState(pos.east()).getBlock().equals(Blocks.AIR) && !this.world.getBlockState(pos.east()).getBlock().equals(BlockHandler.antimatter) && !this.world.getBlockState(pos.up()).getBlock().equals(BlockHandler.antiBlock) && r.nextInt(messiness) == 0) {
 	    					if(this.antimatterRemaining > 0 && !this.hasBeenDestroyed.contains(pos.east())) {
 	    						toAdd.add(pos.east());
 	    						this.antimatterRemaining--;
 	    					}
 	    				}
-	    				if(!this.world.getBlockState(pos.west()).getBlock().equals(Blocks.AIR) && !this.world.getBlockState(pos.west()).getBlock().equals(BlockHandler.antiBlock) && r.nextInt(messiness) == 0) {
+	    				if(!this.world.getBlockState(pos.west()).getBlock().equals(Blocks.AIR) && !this.world.getBlockState(pos.west()).getBlock().equals(BlockHandler.antimatter) && !this.world.getBlockState(pos.up()).getBlock().equals(BlockHandler.antiBlock) && r.nextInt(messiness) == 0) {
 	    					if(this.antimatterRemaining > 0 && !this.hasBeenDestroyed.contains(pos.west())) {
 	    						toAdd.add(pos.west());
 	    						this.antimatterRemaining--;

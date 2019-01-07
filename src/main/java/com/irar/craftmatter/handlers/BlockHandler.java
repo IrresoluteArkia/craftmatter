@@ -7,6 +7,7 @@ import com.irar.craftmatter.block.AntiBlock;
 import com.irar.craftmatter.block.AntiCondenser;
 import com.irar.craftmatter.block.AntiInverter;
 import com.irar.craftmatter.block.AntiPrinter;
+import com.irar.craftmatter.block.Antimatter;
 import com.irar.craftmatter.block.BlueMaker;
 import com.irar.craftmatter.block.MatterCrafter;
 import com.irar.craftmatter.item.ItemAntiBlock;
@@ -29,6 +30,7 @@ public class BlockHandler {
 	public static Block condenser;
 	public static Block inverter;
 	public static Block antiBlock;
+	public static Block antimatter;
 	public static Block matterCrafter;
 	public static ItemBlock ibAntiBlock;
 	public static List<Block> allBlocks = new ArrayList<>();
@@ -38,6 +40,7 @@ public class BlockHandler {
 		condenser = new AntiCondenser(Material.ROCK, "antimatter_condenser", 7.0F, 7.0F, 0, "pickaxe");
 		inverter = new AntiInverter(Material.ROCK, "antimatter_inverter", 7.0F, 7.0F, 0, "pickaxe");
 		antiBlock = new AntiBlock(Material.CLAY, "anti_block", 0.1F, 0.1F);
+		antimatter = new Antimatter(Material.CLAY, "antimatter", 0.1F, 0.1F);
 		matterCrafter = new MatterCrafter(Material.ROCK, "matter_crafter", 7.0F, 7.0F, 0, "pickaxe");
 		
 		allBlocks.add(blueprintMaker);
