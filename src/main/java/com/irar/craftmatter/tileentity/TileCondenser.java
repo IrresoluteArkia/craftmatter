@@ -32,7 +32,7 @@ import net.minecraftforge.oredict.OreDictionary;
 public class TileCondenser extends TileBase{
 	
     public TileCondenser(){
-    	super("Antimatter Condenser", 3, true);
+    	super("Antimatter Condenser", 3, Stores.MATTER);
     	isValid = true;
     	matterNeeded = 100;
     }

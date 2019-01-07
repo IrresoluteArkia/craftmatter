@@ -32,7 +32,7 @@ import net.minecraftforge.oredict.OreDictionary;
 public class TileInverter extends TileBase{
 	
     public TileInverter(){
-    	super("Antimatter Inverter", 2, true);
+    	super("Antimatter Inverter", 2, Stores.MATTER);
     	displayMatter = false;
     }
     

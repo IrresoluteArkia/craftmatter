@@ -30,7 +30,7 @@ import net.minecraftforge.oredict.OreDictionary;
 public class TileBlueMaker extends TileBase{
 	
     public TileBlueMaker(){
-    	super("Blueprint Maker", 4, true);
+    	super("Blueprint Maker", 4, Stores.MATTER);
     }
     
 	@Override

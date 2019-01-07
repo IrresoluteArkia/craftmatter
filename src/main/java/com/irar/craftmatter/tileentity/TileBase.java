@@ -36,7 +36,7 @@ public class TileBase extends TileEntity implements ITickable, IInventory{
     protected String customName = "";
 	public int amountMatter = 0;
 	private int prevMatter = 0;
-	public boolean storesMatter = true;
+	public Stores storesMatter = Stores.MATTER;
 	protected int matterNeeded = 0;
 	protected boolean isValid = false;
 	public static ArrayList<TileBase> tiles = new ArrayList<TileBase>();
@@ -47,7 +47,7 @@ public class TileBase extends TileEntity implements ITickable, IInventory{
     	this.inventory = NonNullList.<ItemStack>withSize(1, ItemStack.EMPTY);
     }
 
-    public TileBase(String name, int numSlots, boolean storesMatter){
+    public TileBase(String name, int numSlots, Stores storesMatter){
     	this.customName = name;
     	this.storesMatter = storesMatter;
     	this.inventory = NonNullList.<ItemStack>withSize(numSlots, ItemStack.EMPTY);
@@ -248,9 +248,9 @@ public class TileBase extends TileEntity implements ITickable, IInventory{
     }
     
 	public void writeMatterToItemStack() {
-		if(this.storesMatter) {
+		if(this.storesMatter.equals(Stores.MATTER)) {
 			this.inventory.set(0, ItemCraft.getCraftMatterWithUnits(this.amountMatter));
-		}else{
+		}else if(this.storesMatter.equals(Stores.ANTIMATTER)){
 			this.inventory.set(0, ItemAntiCraft.getCraftAntiMatterWithUnits(this.amountMatter));
 		}
 	}

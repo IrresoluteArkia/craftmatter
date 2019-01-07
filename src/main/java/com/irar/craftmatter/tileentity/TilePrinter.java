@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.irar.craftmatter.crafting.UnitMapping;
 import com.irar.craftmatter.handlers.ItemHandler;
+import com.irar.craftmatter.item.ItemAntiBlock;
 import com.irar.craftmatter.item.ItemAntiCraft;
 import com.irar.craftmatter.item.ItemAntiItem;
 import com.irar.craftmatter.item.ItemBlueprint;
@@ -16,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -32,7 +34,7 @@ import net.minecraftforge.oredict.OreDictionary;
 public class TilePrinter extends TileBase{
 	
     public TilePrinter(){
-    	super("Antimatter Printer", 4, false);
+    	super("Antimatter Printer", 4, Stores.ANTIMATTER);
     }
     
 	@Override
@@ -71,6 +73,11 @@ public class TilePrinter extends TileBase{
 				inventory.set(3, ItemAntiItem.getWithItemStack(resultItem));
 			}
 			this.markDirty();
+		}
+		if(result.isEmpty() && matter.getItem() instanceof ItemAntiBlock) {
+			if(resultItem.getItem() instanceof ItemBlock) {
+				inventory.set(3, ItemAntiBlock.getWithItemStack(resultItem));
+			}
 		}
 
 	}
