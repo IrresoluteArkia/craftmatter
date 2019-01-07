@@ -1,7 +1,8 @@
 package com.irar.craftmatter.config;
 
 public enum ConfigInts {
-	ANTI_GRENADE_MAX_ANTIMATTER("Maximum antimatter grenade size", "Grenade", 100000, 0, 10000000, "Maximum amount of antimatter able to be crafted into a single grenade");
+	ANTI_GRENADE_MAX_ANTIMATTER("Maximum antimatter grenade size", "Grenade", 100000, 0, 10000000, "Maximum amount of antimatter able to be crafted into a single grenade"),
+	ANTI_GRENADE_BLOCKS_PER_TICK("Blocks per tick", "Grenade", 30, 1, 50000, "Blocks destroyed by antimatter grenades per grenade per tick");
 	
     public final String name;
     public final String category;
